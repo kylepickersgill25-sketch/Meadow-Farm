@@ -1,0 +1,509 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meadow — Farm Decisions</title><meta name="description" content="An agriculture learning game about buying wisely, running costs, farm growth and responding to unexpected events."><meta name="theme-color" content="#214c37"><style>
+:root{--green:#214c37;--paper:#f7f6ee;--line:#dfe4d5}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:#253e30;font-family:'DM Sans',sans-serif}button{font:inherit;cursor:pointer;border:0}header{display:flex;align-items:center;justify-content:space-between;padding:25px 5%;border-bottom:1px solid var(--line)}.logo{font:800 26px Manrope,sans-serif;letter-spacing:-1px}.logo span{color:#779951}header small{color:#73806d}.wrap{max-width:1400px;margin:auto;padding:32px 5%}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#718263;font-weight:700}h1{font:600 clamp(30px,4vw,48px) Manrope,sans-serif;letter-spacing:-2px;margin:8px 0}p{color:#74806e;line-height:1.6}.top{display:flex;justify-content:space-between;align-items:center;gap:20px}.toggle{background:#e6eddc;padding:13px 18px;border-radius:30px;color:var(--green);white-space:nowrap}.toggle.on{background:var(--green);color:white}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:25px 0}.stat{background:white;border:1px solid var(--line);border-radius:16px;padding:20px}.stat small{display:block;color:#7a856f;font-size:12px}.stat strong{display:block;font:700 28px Manrope,sans-serif;margin-top:8px}.layout{display:grid;grid-template-columns:1.5fr 1fr;gap:24px}.scene{height:370px;border-radius:20px;background:#e5eddb;position:relative;overflow:hidden}.sky{position:absolute;inset:0 0 40%;background:#dce9e5}.sun{position:absolute;right:18%;top:35px;width:65px;height:65px;border-radius:50%;background:#f9db8e;box-shadow:0 0 0 15px #f9db8e30}.hill{position:absolute;bottom:-100px;left:-20%;width:140%;height:330px;border-radius:50%;background:#a8c28a;transform:rotate(-8deg)}.hill.two{left:25%;bottom:-150px;background:#83a96d;transform:rotate(10deg)}.barn{position:absolute;left:43%;top:140px;width:115px;height:100px;background:#b56548;border:6px solid #e7c9a4;border-top:0;box-shadow:7px 6px #3c5d3320}.roof{position:absolute;left:calc(43% - 16px);top:88px;width:147px;height:70px;background:#5a6553;clip-path:polygon(50% 0,100% 85%,0 85%)}.door{position:absolute;bottom:0;left:32px;width:40px;height:65px;background:#80503c;border:4px solid #e7c9a4}.animal{position:absolute;font-size:40px;filter:drop-shadow(0 8px 2px #42623720);animation:bob 5s ease-in-out infinite}.a1{left:23%;top:235px}.a2{left:65%;top:250px;animation-delay:-2s}.a3{left:40%;top:280px;animation-delay:-1s}.tree{position:absolute;left:10%;top:90px;font-size:110px}.tree.t2{left:75%;top:130px;font-size:85px}.scene-label{position:absolute;top:22px;left:24px;background:#ffffffb8;padding:8px 12px;border-radius:20px;font-size:11px;letter-spacing:1px}.scene-bottom{position:absolute;bottom:17px;left:20px;color:white;font-size:12px}.panel{border:1px solid var(--line);background:#fff;border-radius:18px;padding:23px;margin-bottom:18px}h2{font:700 19px Manrope,sans-serif;margin:0 0 10px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.muted{font-size:12px;color:#819077}.progress{background:#edf0e6;height:7px;border-radius:8px;margin:17px 0;overflow:hidden}.progress i{display:block;height:100%;background:#91ad65;width:0;transition:width .4s}.building{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;border-top:1px solid #edf0e7;padding:17px 0}.building:last-child{padding-bottom:0}.icon{font-size:28px;background:#f2f4e9;border-radius:12px;padding:9px}.building b{font-size:14px}.building small{display:block;font-size:11px;color:#7f8d75;margin-top:5px}.buy{background:#254e38;color:#fff;border-radius:9px;padding:10px 13px;font-size:12px;min-width:85px}.buy:disabled{background:#eff1e9;color:#9ba48e;cursor:default}.note{padding:18px 0;font-size:12px;color:#7b896e}.activity{font-size:13px;margin-top:15px;color:#6e7d64}.foot{display:flex;justify-content:space-between;margin:20px 0;font-size:11px;color:#8b9681}.link{background:none;color:#78856c;text-decoration:underline;font-size:11px}.modal{position:fixed;inset:0;background:#152e2666;display:grid;place-items:center;z-index:10}.modal[hidden]{display:none}.modal .panel{max-width:390px;margin:20px;padding:30px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#214c37;color:white;padding:12px 22px;border-radius:30px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none}@keyframes bob{50%{transform:translateY(-5px) rotate(3deg)}}@media(max-width:850px){.layout{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.stats{gap:8px}.stat{padding:15px}.stat strong{font-size:21px}.wrap{padding:25px 5%}.scene{height:340px}header small{display:none}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.achievement{padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafbf7}.achievement.earned{background:#eef4e6;border-color:#a9c68b}.achievement b{display:block;margin-top:10px;font-size:13px}.achievement p{margin:6px 0;font-size:11px}.achievement .progress{margin:10px 0 0;height:4px}@media(max-width:460px){.achievement-grid{grid-template-columns:1fr}}
+.shop{margin:0 0 24px}.shop-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.shop-tab{padding:11px 17px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--green);font-size:13px}.shop-tab[aria-pressed="true"]{background:var(--green);color:white}.shop>.panel{margin:0}.shop>.panel[hidden]{display:none}.shop #buildings,.shop #machinery,.shop #staff{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.shop .building{grid-template-columns:36px 1fr;gap:8px;padding:12px;border:1px solid var(--line);border-radius:12px;align-items:start}.shop .building .icon{font-size:23px;padding:4px}.shop .building .buy{grid-column:1/-1;padding:9px}.shop .building small{line-height:1.4}.shop .panel>p{margin:6px 0 15px}.layout{display:block}.layout>section{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}.layout .scene{grid-column:1/-1}.layout .note{grid-column:1/-1;padding:0}.layout .panel{margin-bottom:0}.layout .panel:last-child{grid-column:1/-1}header{padding:18px 5%}.wrap{padding-top:22px}.top p{margin:8px 0}.stats{margin:18px 0}.stat{padding:15px 20px}h1{font-size:36px}.shop h2{font-size:17px}
+@media(max-width:850px){.shop #buildings,.shop #machinery,.shop #staff{grid-template-columns:repeat(2,minmax(0,1fr))}.layout>section{display:block}.layout .panel{margin-bottom:18px}.layout .note{padding:15px 0}.top{flex-direction:row;align-items:center}.top h1{font-size:27px}.top p{font-size:12px}.toggle{font-size:12px;padding:10px}.shop-tab{padding:10px 12px}}
+@media(max-width:460px){.shop .panel{padding:15px}.shop .building b{font-size:12px}.shop .building small{font-size:10px}.shop-tabs{gap:5px}.shop-tab{padding:9px;font-size:11px}.top h1{font-size:25px}.stats .stat{padding:12px}.stats small{font-size:10px}.top .eyebrow{font-size:9px}}
+.stats{grid-template-columns:repeat(5,minmax(0,1fr))}.stat strong{font-size:24px}.cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.cost-grid>div{padding:15px;background:#f3f5ec;border-radius:12px;font-size:12px}.cost-grid strong{display:block;margin-top:7px;font-size:20px}@media(max-width:850px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat strong{font-size:19px}}@media(max-width:460px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cost-grid{grid-template-columns:1fr}.cost-grid strong{font-size:16px}}.farm-controls{display:flex;gap:9px;align-items:center}.restart{background:transparent;border:1px solid #c9d1bf;border-radius:30px;padding:12px 15px;color:#64705c;white-space:nowrap;font-size:12px}.restart:hover{background:#e9ecdf}.scene>svg{display:block;width:100%;height:100%}.scene-bottom{background:#214c37b8;border-radius:10px;padding:7px 10px;max-width:90%}@media(max-width:850px){.top{flex-wrap:wrap}.farm-controls{flex-wrap:wrap}.restart{padding:10px}}.wrap>.scene{height:290px;margin:0 0 20px}.layout .note{margin-bottom:18px}@media(max-width:600px){.wrap>.scene{height:230px}}.planning-strip{display:flex;justify-content:space-between;gap:20px;align-items:center;background:#edf1e5;border:1px solid #dce3d0;border-radius:14px;padding:16px 20px;margin-bottom:18px;font-size:12px}.planning-strip span{display:block;margin-top:5px}.planning-strip strong{margin-left:12px}.planning-strip select{font:inherit;color:#214c37;background:#fff;border:1px solid #b8c5ab;border-radius:7px;padding:6px}.decision-warning{color:#8a4e24;background:#fff1db;padding:10px 12px;border-radius:9px;font-size:12px}.decision-safe{color:#315e38;background:#eaf2e3;padding:10px 12px;border-radius:9px;font-size:12px}.purchase-modal .decision-panel{width:min(680px,94vw);max-width:680px;max-height:90vh;overflow:auto;padding:26px}.decision-panel>p{font-size:13px}.decision-panel h2{font-size:25px;margin-top:8px}.forecast-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.forecast-grid>div{background:#f5f7ef;padding:12px;border-radius:10px}.forecast-grid dt{font-size:11px;color:#75836a}.forecast-grid dd{margin:6px 0 0;font-size:17px;font-weight:700}.decision-actions{display:flex;justify-content:space-between;gap:14px}.purchase-modal{z-index:20}.shop .buy{font-size:11px}.foot{line-height:1.6}.forecast-grid{margin:18px 0}@media(max-width:600px){.planning-strip{flex-direction:column;align-items:stretch}.forecast-grid{gap:7px}.forecast-grid dd{font-size:14px}.purchase-modal .decision-panel{padding:18px}.decision-actions{flex-wrap:wrap}.decision-actions button{width:100%}}.growth-plan h2{margin-top:12px}.requirement{display:flex;justify-content:space-between;gap:20px;padding:9px 0;border-top:1px solid #e7ecdf;font-size:13px}.requirement b{white-space:nowrap}.reset-check{display:flex;gap:12px;align-items:flex-start;margin:24px 0;font-size:14px;line-height:1.5}.reset-check input{width:19px;height:19px;flex-shrink:0}#resetDialog{z-index:30}@media(max-width:600px){.requirement{font-size:12px}}.event-controls h2{margin:8px 0}.event-settings{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:15px 0}.event-settings label{font-size:12px;line-height:1.7}.event-settings select{font:inherit;background:#fff;color:#214c37;border:1px solid #c7d3bd;border-radius:7px;padding:8px;max-width:100%}.active-event-status{background:#edf4e5;border-radius:10px;padding:12px;font-size:13px}.event-modal{z-index:25}.event-panel{width:min(1040px,96vw);max-width:1040px;max-height:94vh;overflow:auto;padding:26px!important}.event-panel h2{font-size:28px;margin:10px 0}.event-panel p{font-size:13px}.event-situation{background:#f1f4e9;border-radius:12px;padding:12px 16px;font-size:13px;line-height:1.6}.event-prompts{border-left:3px solid #a1b47b;margin:15px 0;padding:8px 15px;font-size:13px;line-height:1.6}.event-prompts ul{margin:7px 0;padding-left:18px}.event-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin:18px 0}.event-choice{border:1px solid #dce3d1;border-radius:13px;padding:15px;display:flex;flex-direction:column;background:#fafbf6}.event-choice h3{margin:0;font-size:16px}.event-choice p{font-size:12px;line-height:1.6}.event-choice .choice-cost{font-size:12px;line-height:1.8;color:#35523a;margin-top:auto}.event-choice button{margin-top:12px}.event-panel textarea{box-sizing:border-box;width:100%;resize:vertical;border:1px solid #c9d5bd;border-radius:9px;padding:11px;font:inherit;font-size:13px;margin:7px 0 16px;background:#fff}.event-panel label{font-size:13px}.journal-entry{border-top:1px solid #e1e7d7;padding:15px 0;font-size:13px;line-height:1.7}.journal-entry p{margin:6px 0;font-size:12px}.journal-entry summary{cursor:pointer;font-weight:600}.event-panel #eventContinue{display:block;margin:10px 0}.event-panel .forecast-grid{grid-template-columns:repeat(4,1fr)}@media(max-width:750px){.event-choices{grid-template-columns:1fr}.event-panel h2{font-size:23px}.event-panel .forecast-grid{grid-template-columns:1fr 1fr}.event-panel{padding:18px!important}.event-settings{align-items:stretch;flex-direction:column}.event-controls .row{align-items:flex-start;flex-direction:column}.event-panel .event-choice p{margin:7px 0}}.event-choices[hidden]{display:none}.effect-badge{background:#e7efdb;color:#31523a;border-radius:7px;padding:7px 9px;font-size:11px;font-weight:700;margin-bottom:10px}.effect-description{background:#f0f3e8;border-radius:8px;padding:9px;font-size:11px!important;line-height:1.6}.farm-controls{flex-wrap:wrap;justify-content:flex-end;max-width:600px}.top{align-items:flex-start}.guide-modal,.report-modal,.install-modal{z-index:35}.guide-panel{width:min(780px,94vw);max-width:780px;max-height:90vh;overflow:auto;padding:28px!important}.guide-panel h2{font-size:27px;margin:10px 0}.guide-panel p,.start-steps{font-size:14px;line-height:1.75}.start-steps{padding-left:23px}.start-steps li{margin:12px 0}.guide-panel details{border-top:1px solid #dce4d1;padding:15px 0}.guide-panel summary,.lesson-checklist summary{cursor:pointer;font-weight:700;font-size:15px}.glossary dt{font-weight:700;margin-top:12px;font-size:13px}.glossary dd{margin:3px 0 0;font-size:13px;line-height:1.6}.guide-actions{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:20px 0}.offline-download{font-size:12px;color:#355d3d}.guide-panel label,.purchase-reason-label{display:block;font-size:13px;font-weight:600;margin-top:13px}.guide-panel textarea,#purchaseReason{box-sizing:border-box;width:100%;font:inherit;font-size:13px;line-height:1.6;border:1px solid #c7d3bd;border-radius:9px;padding:12px;resize:vertical;margin:8px 0 15px}.app-message{padding:12px 16px;border-radius:10px;background:#e9efdf;font-size:13px;margin:10px 0}.lesson-checklist{margin-bottom:18px}button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid #c58e2a;outline-offset:3px}.guide-panel .decision-warning{line-height:1.6}.buy:disabled{opacity:.7}@media(max-width:750px){.top{flex-direction:column}.farm-controls{justify-content:flex-start;gap:7px}.guide-panel{padding:20px!important}.guide-panel h2{font-size:22px}.guide-actions{align-items:stretch;flex-direction:column}.guide-actions .buy,.guide-actions .toggle{width:100%}.start-steps,.guide-panel p{font-size:13px}}@media print{body>*{display:none!important}#reportDialog{display:block!important;position:static;background:white}#reportDialog .guide-panel{max-height:none;width:100%;max-width:none;overflow:visible;border:0}#reportDialog button{display:none}#reportDialog textarea{height:100px}}.stats{grid-template-columns:repeat(6,minmax(0,1fr))}.stat{padding:13px}.stat strong{font-size:21px}.app-message[hidden],#debtStatus[hidden]{display:none}@media(max-width:1000px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:460px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat strong{font-size:19px}}.phone-nav{display:none}html{scroll-behavior:smooth;scroll-padding-top:15px}@media(max-width:750px){body{padding-bottom:86px}.phone-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;position:fixed;bottom:0;left:0;right:0;z-index:12;padding:10px 10px calc(10px + env(safe-area-inset-bottom));background:#f7f6ee;border-top:1px solid #cdd8bf}.phone-nav a,.phone-nav button{display:flex;align-items:center;justify-content:center;min-height:46px;background:#214c37;color:white;border-radius:9px;text-decoration:none;font:600 12px sans-serif;padding:8px}.farm-controls .restart,.farm-controls .toggle{min-height:44px}.shop-tabs .shop-tab{min-height:44px}.buy{min-height:44px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style><header><div class="logo">✳ meadow<span>.</span></div><small>Grow a farm. Explain your decisions.</small><span class="muted" id="save">● Autosave on</span></header><main class="wrap"><div class="top"><div><div class="eyebrow">Your own patch of countryside</div><h1>Let the good things grow.</h1><p>Balance growth, running costs and responsible farm management.</p></div><div class="farm-controls"><button class="restart" id="helpButton">Help</button><button class="restart" id="pauseButton" aria-pressed="false">Ⅱ Pause</button><button class="restart" id="reportButton">My report</button><button class="restart" id="reset">↻ Restart farm</button><button class="toggle" id="auto" aria-pressed="true">● Autopilot on</button></div></div><p class="muted" id="playStatus"></p><div class="app-message" id="appStatus" role="status" hidden></div><p class="decision-warning" id="debtStatus" role="status" hidden></p><section class="stats" id="farmFigures"><div class="stat"><small>FARM BALANCE</small><strong id="money">£0</strong></div><div class="stat"><small>NET PROFIT / FARM DAY</small><strong id="rate">£1</strong></div><div class="stat"><small>GROSS INCOME / FARM DAY</small><strong id="gross"></strong></div><div class="stat"><small>RUNNING COSTS / FARM DAY</small><strong id="costs"></strong></div><div class="stat"><small>UNPAID BILLS</small><strong id="unpaidBills"></strong></div><div class="stat"><small>LIFETIME EARNINGS</small><strong id="total">£0</strong></div></section><div class="planning-strip"><div><b id="farmDay">Farm day 1</b><span class="muted">1 minute = 1 farm day · Farm pauses for decisions, hidden tabs and between sessions</span></div><div><label for="reserveSelect">Protect a cost reserve of </label><select id="reserveSelect"><option value="1">1 farm day</option><option value="7" selected>7 farm days</option><option value="30">30 farm days</option></select><strong id="cashReserve"></strong><span id="reserveStatus" role="status"></span></div></div><div class="scene" aria-label="Illustrated farm landscape"><div class="sky"></div><div class="sun"></div><div class="hill"></div><div class="hill two"></div><div class="tree">🌳</div><div class="tree t2">🌳</div><div class="roof"></div><div class="barn"><div class="door"></div></div><div class="animal a1">🐑</div><div class="animal a2">🐄</div><div class="animal a3">🐓</div><div class="scene-label" id="farmStage">✦ HOMESTEAD</div><div class="scene-bottom">A quiet day on the farm · Everything is ticking along</div></div><details class="panel lesson-checklist"><summary>My lesson goals</summary><p class="muted">Aim for good explanations, not the highest earnings. Keep autopilot off to make your own decisions.</p><div id="lessonObjectives"></div></details><section class="panel event-controls" id="farmChallenges" tabindex="-1" aria-label="Farm challenges"><div class="row"><div><div class="eyebrow">Farm challenges</div><h2>Decide, explain, reflect.</h2></div><span class="muted">The simulation pauses for each decision</span></div><div id="activeEventStatus" class="active-event-status" role="status"></div><p class="muted">Events appear randomly and only involve enterprises you own. You choose how to respond, but cannot choose or switch off the event. The simulation pauses for your decision. Responses can give a buff, cause a debuff, or fully or partly counter the problem. Effects last three farm days. Events and choices are fictional teaching scenarios.</p></section><div class="panel growth-plan"><div class="eyebrow" id="stageUnlock"></div><div id="growthChecklist"></div></div><aside id="farmPurchases" class="shop" aria-label="Farm purchases"><div class="panel"><div class="row"><h2>Grow your farm</h2><span class="muted">PERMANENT INCOME</span></div><p class="muted">New crops and animals unlock as your farm reaches the next growth stage. Each enterprise has a capacity of 20 units; diversify to keep developing.</p><div id="buildings"></div></div><div class="panel"><h2>Machinery shed</h2><p class="muted">Each machinery level adds 35% crop income, with new tiers unlocked by farm stages. Runs automatically once purchased.</p><div id="machinery"></div></div><div class="panel"><h2>Better fertiliser</h2><p class="muted">Permanent +15% crop income per level, including the orchard. Stacks with your team and machinery.</p><div class="row"><span class="muted" id="fertiliserDetail"></span><button class="buy" id="fertiliserBuy" aria-label="Upgrade fertiliser"></button></div></div><div class="panel"><h2>Your farm team</h2><p class="muted">Hiring cost plus daily wages; wages are deducted automatically. Crops include the orchard; livestock includes bees. Team boosts stack with machinery.</p><div id="staff"></div></div><div class="panel"><div class="row"><h2>A helping hand</h2><span>🌱</span></div><p class="muted" id="autoDesc">Autopilot chooses positive-profit upgrades every 5 seconds and keeps your selected running-cost reserve. Switch it off for learner purchase decisions. New farms start with autopilot off.</p><div class="row"><span class="muted" id="boostLabel">Whole-farm improvements · ×1 income</span><button class="buy" id="boost">£500</button></div></div><div class="panel"><h2>Keep your farm efficient</h2><p class="muted">Seed, feed and utilities cost 30% of gross income before savings. Staff have wages, and machinery and fertiliser need upkeep. Costs apply during active play; the farm pauses when hidden or closed. Cash cannot fall below £0. Any uncovered costs become unpaid bills; future cash repays them before expansion can resume.</p><div class="cost-grid"><div>Supplies & utilities<strong id="supplyCost"></strong></div><div>Staff wages<strong id="wageCost"></strong></div><div>Upkeep<strong id="upkeepCost"></strong></div><div>Event response costs<strong id="eventCost"></strong></div></div><div class="row"><div><b>Farm efficiency</b><p class="muted" id="efficiencyDetail"></p></div><button class="buy" id="efficiencyBuy" aria-label="Improve farm efficiency"></button></div><p class="muted">Better planning, bulk buying and preventative maintenance reduce all running costs by 15% per level, up to 65% total savings.</p><p class="muted" id="profitWarning" role="status"></p></div></aside><div class="layout"><section><div class="note">☀ Products sell automatically. No planting cycles, collecting or constant clicking.</div><div class="panel"><div class="row"><h2 id="goalTitle">A promising start</h2><span class="muted" id="goalCount"></span></div><p class="muted" id="goalDesc"></p><div class="progress"><i id="bar"></i></div><span class="muted" id="goalReward"></span></div><div class="panel"><h2>Farm level journey</h2><p class="muted">Stages require both lifetime sales and a developed farm. Meet the checklist to advance; spending never removes an earned stage.</p><div id="levels"></div></div><div class="panel"><div class="row"><h2>Achievements</h2><span class="muted" id="achievementCount"></span></div><p class="muted">Little victories along the way. Unlock automatically, with no claiming needed.</p><div id="achievements" class="achievement-grid"></div></div><div class="panel"><h2>Decision journal</h2><p class="muted">Your recent event choices, reasons and modelled outcomes. Entries are saved on this browser.</p><div id="decisionJournal"></div></div><div class="panel"><h2>Farm journal</h2><div id="journal" class="activity" aria-live="polite">Welcome to your meadow. Your first wheat field is already earning.</div></div></section></div><footer class="foot"><span>Simplified teaching simulation: figures are game assumptions, not UK farm benchmarks. Saved on this browser.</span></footer></main><nav class="phone-nav" aria-label="Quick actions"><a href="#farmFigures">My figures</a><a href="#farmPurchases">Buy / upgrade</a><button id="phoneReport">My report</button></nav><div class="modal" id="welcome" hidden><div class="panel"><div class="eyebrow">Welcome back</div><h1>Your farm kept growing.</h1><p id="away"></p><button class="buy" id="close">Lovely, carry on →</button></div></div><div class="toast" id="toast"></div><div class="modal purchase-modal" id="purchaseDecision" hidden role="dialog" aria-modal="true" aria-labelledby="decisionTitle" aria-describedby="decisionIntro"><div class="panel decision-panel"><div class="eyebrow">Purchase decision · simulation paused</div><h2 id="decisionTitle"></h2><p id="decisionIntro">Can you afford to buy it — and keep the farm running? Forecast assumes today's output and prices stay the same.</p><dl class="forecast-grid"><div><dt>Upfront purchase cost</dt><dd id="decisionUpfront"></dd></div><div><dt>Extra gross income</dt><dd id="decisionGross"></dd></div><div><dt>Extra running costs</dt><dd id="decisionCosts"></dd></div><div><dt>Extra net profit</dt><dd id="decisionNet"></dd></div><div><dt>Estimated payback</dt><dd id="decisionPayback"></dd></div><div><dt>Cash left after buying</dt><dd id="decisionCash"></dd></div><div><dt>Cost reserve needed after buying</dt><dd id="decisionReserve"></dd></div><div><dt>Cash coverage with no sales</dt><dd id="decisionCoverage"></dd></div><div><dt>Whole farm profit before</dt><dd id="decisionBefore"></dd></div><div><dt>Whole farm profit after</dt><dd id="decisionAfter"></dd></div></dl><p id="decisionWarning" role="status"></p><label for="purchaseReason" class="purchase-reason-label">Why buy now or save for later? (optional)</label><textarea id="purchaseReason" rows="2" maxlength="600" placeholder="I would buy / save because…"></textarea><p class="muted">Discuss: Why buy now? What happens if sales fall? Would saving first be safer? Payback uses the extra net profit, not gross income.</p><div class="decision-actions"><button class="toggle" id="decisionCancel">Save for later</button><button class="buy" id="decisionConfirm">Buy now</button></div></div></div><div class="modal purchase-modal" id="resetDialog" hidden role="dialog" aria-modal="true" aria-labelledby="resetTitle"><div class="panel decision-panel"><div class="eyebrow">Start a new farm</div><h2 id="resetTitle">Restart from Homestead?</h2><p>This clears the money, crops, livestock, upgrades, staff, achievements and farm levels saved in this browser. You will start with one wheat field, £15 and autopilot off.</p><label class="reset-check"><input type="checkbox" id="resetAccept"> I understand this permanently clears my farm progress.</label><div class="decision-actions"><button class="toggle" id="resetCancel">Keep my farm</button><button class="buy" id="resetConfirm" disabled>Restart from scratch</button></div></div></div><div class="modal event-modal" id="eventDialog" hidden role="dialog" aria-modal="true" aria-labelledby="eventTitle" aria-describedby="eventDescription"><div class="panel event-panel"><div class="eyebrow" id="eventCategory"></div><h2 id="eventTitle"></h2><p id="eventDescription"></p><div id="eventSituation" class="event-situation"></div><div id="eventPrompts" class="event-prompts"></div><div id="eventChoices" class="event-choices"></div><div id="eventReasonBox"><label for="eventReason"><b>My reason (optional)</b></label><textarea id="eventReason" rows="2" maxlength="600" placeholder="I would choose this because…"></textarea></div><div id="eventOutcome" hidden><h3 id="eventOutcomeTitle"></h3><p id="eventOutcomeText"></p><dl class="forecast-grid" id="eventOutcomeFigures"></dl><label for="eventReflection"><b>What could you do differently next time? (optional)</b></label><textarea id="eventReflection" rows="2" maxlength="600" placeholder="Next time I would…"></textarea><button class="buy" id="eventContinue">Continue farming</button></div><p class="muted">Three farm days = three minutes of play. Essential animal care continues in every option. Figures are simplified model predictions, not guaranteed results.</p><button class="link" id="eventReset">Restart farm instead</button></div></div><div class="modal guide-modal" id="guideDialog" hidden role="dialog" aria-modal="true" aria-labelledby="guideTitle"><div class="panel guide-panel"><div class="eyebrow">Welcome to Meadow</div><h2 id="guideTitle">Open the link. Play your farm.</h2><p><b>No installation, account or payment is needed to play.</b> Open the link in your phone’s usual browser and bookmark it to find it again. For reliable saving, use the same phone and browser each lesson rather than a Teams or ChatGPT preview.</p><p>You start with <b>one wheat field and £15</b>. Produce sells automatically, but every enterprise has running costs. You decide when it is sensible to grow.</p><ol class="start-steps"><li><b>Read your balance and daily figures.</b> Net profit is what remains after running costs.</li><li><b>Open a purchase forecast.</b> Compare price, extra profit, payback and cash left. Buying immediately is not always the best choice.</li><li><b>Use the next-stage checklist.</b> Develop different enterprises to unlock crops, animals, machinery and staff.</li><li><b>Respond to random events.</b> Read the situation, compare responses and explain your reason. Buffs help, debuffs create pressure, and counters protect against a problem.</li><li><b>Finish with My report.</b> Record what you learned and download the report to submit as your tutor asks.</li></ol><div class="decision-warning">Progress and written answers are stored on this browser only. On a shared computer, download your report before restarting for the next learner. Do not put personal or sensitive information in your answers.</div><details><summary>Farm-business glossary and worked example</summary><dl class="glossary"><dt>Gross income</dt><dd>Money from sales before running costs are taken away.</dd><dt>Running costs</dt><dd>Repeated spending such as feed, seed, wages, utilities and upkeep.</dd><dt>Net profit</dt><dd>Sales income minus running costs. A negative result is a loss.</dd><dt>Cash flow</dt><dd>Money moving into and out of the farm. A profitable farm can still run short of cash.</dd><dt>Unpaid bills</dt><dd>Costs the farm could not cover. Future cash pays them first, and new purchases wait until they are cleared.</dd><dt>Reserve</dt><dd>Cash kept available for a chosen number of days of costs.</dd><dt>Payback</dt><dd>How long extra net profit takes to recover the purchase price, if conditions stay the same.</dd><dt>Welfare</dt><dd>Meeting animals’ needs and providing suitable care. Essential care continues in every event option.</dd><dt>Buff, debuff and counter</dt><dd>A temporary benefit, a temporary disadvantage, or a response that fully or partly protects the farm from a problem.</dd></dl><p><b>Worked example:</b> A purchase costs £100. It adds £8/day of sales and £3/day of costs. Extra net profit = £8 − £3 = <b>£5/day</b>. Payback = £100 ÷ £5 = <b>20 farm days</b>. You still need enough cash for your other bills.</p></details><details><summary>Tutor session suggestion · 50 minutes</summary><p><b>0–5 min:</b> Introduce income, costs and cash. <b>5–15 min:</b> Compare two purchase forecasts. <b>15–35 min:</b> Grow towards the next milestone and respond to events. <b>35–45 min:</b> Discuss a decision with a partner. <b>45–50 min:</b> Complete and download the learning report.</p><p>The figures are game assumptions, not current UK farm prices, a qualification assessment or a farm-business recommendation. Discuss the limits: simplified daily output, fixed capacity and short event durations. Random events mean students will face different situations.</p></details><div class="guide-actions"><button class="buy" id="guideStart">Play / return to farm</button></div><p class="muted">One minute of active play equals one farm day. Your farm pauses for decisions, when this tab is hidden, and between sessions. Reports are not automatically sent to a tutor.</p></div></div><div class="modal report-modal" id="reportDialog" hidden role="dialog" aria-modal="true" aria-labelledby="reportTitle"><div class="panel guide-panel"><div class="eyebrow">Learning report · farm paused</div><h2 id="reportTitle">Explain how you managed your farm</h2><p id="reportSnapshot"></p><p class="muted" id="reportChoices"></p><label for="report_decision">1. Which decision did you make and why?</label><textarea id="report_decision" rows="3" maxlength="1000" placeholder="I chose… because…"></textarea><label for="report_costs">2. How did costs, cash flow or welfare affect your choice?</label><textarea id="report_costs" rows="3" maxlength="1000" placeholder="I checked… This mattered because…"></textarea><label for="report_next">3. What would you do differently next time?</label><textarea id="report_next" rows="3" maxlength="1000" placeholder="Next time I would…"></textarea><p class="muted">Your download includes farm figures, purchase decisions, event choices and these reflections. Add your name through your usual college submission system if required; it is not needed in this game.</p><div class="guide-actions"><button class="toggle" id="reportClose">Return to farm</button><button class="buy" id="downloadReport">Download my report (.txt)</button></div><p id="reportDownloadStatus" role="status"></p></div></div><script>
+document.getElementById("phoneReport").onclick=()=>showReport();
+
+
+const shop=document.querySelector('.shop'),shopPanels=Array.from(shop.children);
+const shopTabs=document.createElement('div');shopTabs.className='shop-tabs';shopTabs.setAttribute('aria-label','Purchase categories');
+const tabNames=['🌾 Crops & animals','🚜 Machinery','🌿 Fertiliser','🧑‍🌾 Farmhands','📈 Farm upgrades','💷 Running costs'];
+shopPanels.forEach((panel,i)=>{panel.id='purchase-panel-'+i;panel.hidden=i!==0;const button=document.createElement('button');button.className='shop-tab';button.textContent=tabNames[i];button.setAttribute('aria-controls',panel.id);button.setAttribute('aria-pressed',i===0?'true':'false');button.onclick=()=>{shopPanels.forEach((p,j)=>{p.hidden=j!==i;shopTabs.children[j].setAttribute('aria-pressed',j===i?'true':'false')})};shopTabs.appendChild(button)});shop.prepend(shopTabs);
+
+const types=[{name:'Wheat field',icon:'🌾',base:10,rate:1,desc:'Your first harvest, sold automatically'},{name:'Potato field',icon:'🥔',base:75,rate:6,desc:'A dependable staple crop'},{name:'Maize field',icon:'🌽',base:450,rate:30,desc:'Golden rows and bigger harvests'},{name:'Chicken coop',icon:'🐓',base:15,rate:1,desc:'Fresh eggs, every day'},{name:'Sheep meadow',icon:'🐑',base:150,rate:9,desc:'Soft wool, steady income'},{name:'Dairy pasture',icon:'🐄',base:1200,rate:60,desc:'Milk from happy cows'},{name:'Bee garden',icon:'🐝',base:9000,rate:360,desc:'A little honey goes a long way'},{name:'Orchard',icon:'🍎',base:65000,rate:2100,desc:'Good things come in seasons'}];
+function randomEventDelay(){return (3+Math.random()*4)*60}
+const fresh=()=>({version:9,unpaidBills:0,hasSeenGuide:false,lessonPaused:false,purchaseJournal:[],lessonNotes:{},lastEventId:null,eventsEnabled:true,nextEventAt:randomEventDelay(),eventSequence:0,pendingEvent:null,activeEffect:null,decisionJournal:[],growthLevel:0,reserveDays:7,simSeconds:0,efficiency:0,fertiliser:0,staff:[0,0,0],achievements:[],money:15,total:0,counts:[1,0,0,0,0,0,0,0],machines:[0,0,0],boost:0,auto:false,stamp:Date.now(),goals:0});let s=fresh(),storage=true;try{const v=JSON.parse(localStorage.getItem('meadow-v1'));if(v&&Array.isArray(v.counts)&&[5,8].includes(v.counts.length)&&v.counts.every(n=>Number.isInteger(n)&&n>=0)&&[v.money,v.total,v.boost,v.stamp,v.goals].every(Number.isFinite)){s=v;if(s.counts.length===5){s.counts=[0,0,0,...s.counts];s.version=2;s.machines=[0,0,0]}if(!Array.isArray(s.machines)||s.machines.length!==3||!s.machines.every(n=>Number.isInteger(n)&&n>=0))s.machines=[0,0,0];}}catch(e){storage=false}
+if(!Number.isFinite(s.simSeconds)||s.simSeconds<0)s.simSeconds=0;
+s.eventsEnabled=true;
+if(s.version<8||!Number.isFinite(s.version)){s.nextEventAt=s.simSeconds+randomEventDelay();s.version=9}
+if(typeof s.lastEventId!=='string')s.lastEventId=null;
+if(!Number.isFinite(s.unpaidBills)||s.unpaidBills<0)s.unpaidBills=0;
+if(typeof s.hasSeenGuide!=='boolean')s.hasSeenGuide=true;
+if(typeof s.lessonPaused!=='boolean')s.lessonPaused=false;
+if(!Array.isArray(s.purchaseJournal))s.purchaseJournal=[];
+if(!s.lessonNotes||typeof s.lessonNotes!=='object'||Array.isArray(s.lessonNotes))s.lessonNotes={};
+delete s.eventLevel;
+if(!Number.isFinite(s.nextEventAt))s.nextEventAt=s.simSeconds+randomEventDelay();
+if(!Number.isInteger(s.eventSequence)||s.eventSequence<0)s.eventSequence=0;
+if(!Array.isArray(s.decisionJournal))s.decisionJournal=[];
+if(!s.pendingEvent||typeof s.pendingEvent.id!=='string')s.pendingEvent=null;
+if(!s.activeEffect||!Number.isFinite(s.activeEffect.until))s.activeEffect=null;
+if(!Number.isInteger(s.growthLevel)||s.growthLevel<0||s.growthLevel>8)s.growthLevel=0;
+if(![1,7,30].includes(s.reserveDays))s.reserveDays=7;
+if(!Number.isFinite(s.simSeconds)||s.simSeconds<0)s.simSeconds=0;
+if(!Number.isInteger(s.efficiency)||s.efficiency<0)s.efficiency=0;
+if(!Number.isInteger(s.fertiliser)||s.fertiliser<0)s.fertiliser=0;
+if(!Array.isArray(s.staff)||s.staff.length!==3||!s.staff.every(n=>Number.isInteger(n)&&n>=0))s.staff=[0,0,0];
+if(!Array.isArray(s.achievements))s.achievements=[];
+const $=id=>document.getElementById(id),fmt=n=>new Intl.NumberFormat('en-GB',{notation:n>=1e6?'compact':'standard',maximumFractionDigits:n>=1e6?2:Math.abs(n)<100?2:0}).format(n),cash=n=>'£'+fmt(n),baseEnterpriseRate=i=>types[i].rate*s.counts[i]*(i<3?1.35**s.machines[i]:1)*staffMultiplier(i)*1.2**s.boost*.2,
+baseGrossRate=()=>types.reduce((sum,_,i)=>sum+baseEnterpriseRate(i),0),
+effectValue=key=>s.activeEffect?.mod?.[key]??1,
+grossRate=()=>types.reduce((sum,_,i)=>sum+baseEnterpriseRate(i)*(i<3||i===7?effectValue('crop'):effectValue('animal')),0)*effectValue('price'),
+runningCosts=()=>{const cropBase=types.reduce((sum,_,i)=>sum+(i<3||i===7?baseEnterpriseRate(i):0),0),animalBase=baseGrossRate()-cropBase;
+const supplies=(cropBase*.25*effectValue('cropSupply')+animalBase*.25*effectValue('animalSupply')+baseGrossRate()*.05*effectValue('energy'));
+const wages=s.staff.reduce((a,n,i)=>a+n*[.02,.08,.3][i],0);
+const upkeep=(s.machines.reduce((a,n)=>a+n*.03,0)+s.fertiliser*.02)*effectValue('upkeep');
+const factor=Math.max(.35,.85**s.efficiency),event=(s.activeEffect?.mod?.extraDaily??0)/60;
+return {supplies:supplies*factor,wages:wages*factor,upkeep:upkeep*factor,event,total:(supplies+wages+upkeep)*factor+event}},
+
+rate=()=>grossRate()-runningCosts().total,cost=i=>Math.ceil(types[i].base*1.15**s.counts[i]),boostCost=()=>500*6**s.boost;const stages=[
+{name:'Homestead',at:0,desc:'A few animals and a patch of land.',icon:'🏡'},
+{name:'Smallholding',at:100,desc:'A growing mix of animals and produce.',icon:'🌱'},
+{name:'Family Farm',at:1000,desc:'A dependable farm supplying local families.',icon:'🚜'},
+{name:'Local Producer',at:5000,desc:'Your produce is a familiar sight at local markets.',icon:'🧺'},
+{name:'Commercial Farm',at:20000,desc:'A thriving business with production at scale.',icon:'🏭'},
+{name:'Regional Supplier',at:100000,desc:'Supplying shops and businesses across the region.',icon:'🚚'},
+{name:'National Producer',at:500000,desc:'Your farm supplies customers across the country.',icon:'🇬🇧'},
+{name:'Export Business',at:2e6,desc:'Your produce reaches customers overseas.',icon:'🚢'},
+{name:'International Production',at:1e7,desc:'A global farming operation, grown from one little meadow.',icon:'🌍'}];
+const goals=stages.slice(1).map(x=>x.at);
+const farmLevel=()=>s.growthLevel;
+const unlockLevels=[0,1,2,1,3,4,5,6];
+const unlocked=i=>farmLevel()>=unlockLevels[i];
+const productionCap=20;
+const unlockDescriptions=[
+'Wheat fields and basic fertiliser',
+'Potatoes, chickens and field workers',
+'Maize and your first machinery upgrades',
+'Sheep, stockpeople and another machinery tier',
+'Dairy cattle and whole-farm improvements',
+'Beekeeping and farm managers',
+'Orchards and efficiency level 5',
+'Export improvements: whole-farm upgrade levels 4–6 and final machinery tiers',
+'International improvements: whole-farm upgrade levels 7–8 and maximum efficiency'
+];
+const countRule=(i,n)=>({label:'Own '+n+' '+types[i].name.toLowerCase()+' units',current:s.counts[i],target:n});
+function stageRequirements(level){
+const money={label:'Earn '+cash(stages[level].at)+' in lifetime sales',current:s.total,target:stages[level].at};
+const machinery={label:'Buy 3 machinery upgrades in total',current:s.machines.reduce((a,b)=>a+b,0),target:3};
+const rules=[
+[],
+[countRule(0,5)],
+[countRule(1,3),countRule(3,3)],
+[countRule(2,3),{label:'Own a wheat tractor upgrade',current:s.machines[0],target:1}],
+[countRule(4,3),{label:'Hire a stockperson',current:s.staff[1],target:1}],
+[countRule(5,3),machinery,{label:'Reach efficiency level 2',current:s.efficiency,target:2}],
+[countRule(6,3),{label:'Hire a farm manager',current:s.staff[2],target:1}],
+[countRule(7,5),{label:'Reach fertiliser level 4',current:s.fertiliser,target:4},{label:'Reach efficiency level 4',current:s.efficiency,target:4}],
+[...types.map((_,i)=>countRule(i,10)),{label:'Hire 10 staff in total',current:s.staff.reduce((a,b)=>a+b,0),target:10},{label:'Reach whole-farm improvement level 4',current:s.boost,target:4},{label:'Reach efficiency level 6',current:s.efficiency,target:6}]
+];
+return [money,...rules[level]];
+}
+function upgradeLimit(kind,i=0){
+const level=farmLevel();
+if(kind==='production')return productionCap;
+if(kind==='machine')return Math.max(0,level-1);
+if(kind==='fertiliser')return level+1;
+if(kind==='efficiency')return Math.min(7,Math.max(0,level-1));
+if(kind==='boost')return level>=8?8:level>=7?6:Math.max(0,level-3);
+return Infinity;
+}
+function stageAllows(kind,i=0){
+if(s.unpaidBills>1e-8)return false;
+if(kind==='production')return unlocked(i)&&s.counts[i]<productionCap;
+if(kind==='machine')return s.counts[i]>0&&s.machines[i]<upgradeLimit(kind,i);
+if(kind==='staff')return farmLevel()>=[1,3,5][i];
+if(kind==='fertiliser')return s.fertiliser<upgradeLimit(kind);
+if(kind==='efficiency')return s.efficiency<upgradeLimit(kind);
+if(kind==='boost')return s.boost<upgradeLimit(kind);
+return false;
+}
+function advanceGrowth(){
+while(s.growthLevel<8&&stageRequirements(s.growthLevel+1).every(r=>r.current>=r.target)){
+s.growthLevel++;
+// Old cash/achievements survive migration; milestone bonuses are never paid twice.
+if(s.goals<s.growthLevel){s.money+=stages[s.growthLevel].at*.1;s.goals=s.growthLevel}
+log('Milestone reached: '+stages[s.growthLevel].name+'! Unlocked: '+unlockDescriptions[s.growthLevel]+'.');
+}
+}
+let displayedStage=-1;
+function updateScene(level){if(displayedStage===level)return;displayedStage=level;
+const scene=document.querySelector('.scene');
+const palettes=['#dce9e5','#d8e9df','#d6e6df','#cde3de','#c9dfdf','#c4dce0','#c1dce3','#bad6e0','#b7d4df'];
+const building=(x,y,w,h,color)=>'<g><rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="2" fill="'+color+'" stroke="#f5e5ca" stroke-width="4"/><path d="M'+(x-7)+' '+y+' L'+(x+w/2)+' '+(y-35)+' L'+(x+w+7)+' '+y+'Z" fill="#4e6255"/><rect x="'+(x+w*.35)+'" y="'+(y+h*.4)+'" width="'+(w*.3)+'" height="'+(h*.6)+'" fill="#7a543c"/></g>';
+const field=(x,y,w,color)=>'<g><path d="M'+x+' '+y+' l'+w+' -15 l40 55 l-'+w+' 15Z" fill="'+color+'" stroke="#e8ddab" stroke-width="3"/>'+Array.from({length:6},(_,i)=>'<path d="M'+(x+8+i*w/7)+' '+(y+2-i*2)+' l30 40" stroke="#88713f" stroke-opacity=".35" stroke-width="3"/>').join('')+'</g>';
+const truck=(x,y)=>'<g transform="translate('+x+' '+y+')"><rect width="52" height="26" rx="3" fill="#f4e8ce"/><path d="M52 8h19l10 12v15H52Z" fill="#bc7250"/><circle cx="16" cy="35" r="8" fill="#374a40"/><circle cx="65" cy="35" r="8" fill="#374a40"/></g>';
+let content=field(65,225,160,'#d4bd6c');
+content+=building(level===0?340:310,level===0?172:155,level===0?75:120,level===0?66:90,'#b97150');
+if(level>=1)content+=field(420,255,150,'#afbf6c')+ '<text x="240" y="278" font-size="32">🐓</text>';
+if(level>=2)content+=building(155,170,85,70,'#cfb98a')+'<text x="480" y="210" font-size="36">🐑</text>';
+if(level>=3)content+= '<path d="M0 310 Q380 255 800 310" stroke="#d2cbb5" stroke-width="28" fill="none"/><text x="290" y="293" font-size="45">🚜</text><text x="505" y="239" font-size="36">🐄</text>';
+if(level>=4)content+=building(540,133,145,80,'#a2b5aa')+field(30,155,100,'#a6b76b');
+if(level>=5)content+=truck(515,283)+'<g fill="#86a7b1" stroke="#e4ece7" stroke-width="3"><rect x="370" y="160" width="50" height="18"/><rect x="370" y="183" width="50" height="18"/></g>';
+if(level>=6)content+=building(55,110,130,60,'#9baea8')+truck(635,280)+'<path d="M0 330H800" stroke="#839b92" stroke-width="8"/>';
+if(level>=7)content+='<g fill="#7199a8"><rect x="600" y="223" width="70" height="27"/><rect x="675" y="223" width="70" height="27"/></g><path d="M710 130V55H760M735 55V175" stroke="#5c7e80" stroke-width="6"/>';
+if(level>=8)content+='<circle cx="705" cy="82" r="33" fill="#eff5e3" opacity=".9"/><text x="678" y="102" font-size="48">🌍</text>'+truck(325,308);
+const captions=['A patch of land and your first wheat harvest','More fields and the first animals arrive','A family farm takes shape','A busy local producer with a tractor at work','Larger barns and organised production','Solar power and deliveries across the region','A national operation with distribution buildings','Export containers and transport links overseas','A global farming business, grown from one field'];
+scene.setAttribute('aria-label',stages[level].name+' farm illustration. '+captions[level]);
+scene.innerHTML='<svg viewBox="0 0 800 370" preserveAspectRatio="xMidYMid slice" role="img" aria-label="'+stages[level].name+'"><rect width="800" height="370" fill="'+palettes[level]+'"/><circle cx="650" cy="62" r="31" fill="#f4d78c"/><ellipse cx="190" cy="250" rx="520" ry="135" fill="#a7bf8a"/><ellipse cx="690" cy="340" rx="530" ry="160" fill="#84a46b"/>'+content+'<g fill="#527c51"><circle cx="40" cy="113" r="25"/><circle cx="755" cy="178" r="30"/></g><path d="M40 130v40M755 198v40" stroke="#826d49" stroke-width="9"/><\/svg><div class="scene-label" id="farmStage"></div><div class="scene-bottom">'+captions[level]+'</div>';
+}
+let logs=['Your farm is running. Income is credited after running costs.'];function log(t){logs.unshift(t);logs=logs.slice(0,4);$('journal').textContent=logs.join(' • ')}function earn(n,sales=n){const available=s.money+n;if(available<0){s.unpaidBills-=available;s.money=0}else{const repaid=Math.min(s.unpaidBills,available);s.unpaidBills-=repaid;s.money=available-repaid}s.total+=Math.max(0,sales);advanceGrowth()}
+
+function staffMultiplier(i){return (i<3||i===7?1.15**s.fertiliser:1)*(1+.25*s.staff[i<3||i===7?0:1])*(1+.1*s.staff[2])}
+const efficiencyCost=()=>Math.ceil(150*3**s.efficiency);
+function buyEfficiency(automated=false){return transact('efficiency',0,automated)}
+$('efficiencyBuy').onclick=()=>buyEfficiency();
+const fertiliserCost=()=>Math.ceil(125*3**s.fertiliser);
+function buyFertiliser(automated=false){return transact('fertiliser',0,automated)}
+$('fertiliserBuy').onclick=()=>buyFertiliser();
+const staffTypes=[{name:'Field worker',icon:'🧑‍🌾',base:300,desc:'+25% base crop income per worker',group:'crops'},{name:'Stockperson',icon:'🐄',base:700,desc:'+25% base livestock income per worker',group:'livestock'},{name:'Farm manager',icon:'📋',base:3000,desc:'+10% income across the whole farm per manager',group:'all'}];
+const staffCost=i=>Math.ceil(staffTypes[i].base*2.5**s.staff[i]);
+function hire(i,automated=false){return transact('staff',i,automated)}
+$('staff').innerHTML=staffTypes.map((m,i)=>'<div class="building"><div class="icon">'+m.icon+'</div><div><b>'+m.name+'</b><small>'+m.desc+'</small><small id="staffDetail'+i+'"></small></div><button class="buy" id="staffBuy'+i+'" aria-label="Hire '+m.name+'"></button></div>').join('');
+staffTypes.forEach((m,i)=>$('staffBuy'+i).onclick=()=>hire(i));
+const achievementDefs=[
+{id:'fertiliser',name:'Groundwork',desc:'Improve your fertiliser for the first time',icon:'🌿',target:1,value:()=>s.fertiliser},
+{id:'soil',name:'Rich soil',desc:'Reach fertiliser level five',icon:'🌻',target:5,value:()=>s.fertiliser},
+{id:'seed',name:'Seeds of success',desc:'Own your first crop field',icon:'🌱',target:1,value:()=>s.counts[0]+s.counts[1]+s.counts[2]},
+{id:'fields',name:'Room to grow',desc:'Own 25 crop fields',icon:'🌾',target:25,value:()=>s.counts[0]+s.counts[1]+s.counts[2]+s.counts[7]},
+{id:'variety',name:'A varied harvest',desc:'Own wheat, potatoes and maize',icon:'🧺',target:3,value:()=>s.counts.slice(0,3).filter(n=>n>0).length},
+{id:'animal',name:'A little company',desc:'Own your first livestock unit',icon:'🐓',target:1,value:()=>s.counts.slice(3,7).reduce((a,b)=>a+b,0)},
+{id:'herd',name:'Life on the farm',desc:'Own 50 livestock units',icon:'🐑',target:50,value:()=>s.counts.slice(3,7).reduce((a,b)=>a+b,0)},
+{id:'mixed',name:'Something of everything',desc:'Own all eight production types',icon:'🍎',target:8,value:()=>s.counts.filter(n=>n>0).length},
+{id:'machine',name:'Work smarter',desc:'Buy your first machinery upgrade',icon:'🚜',target:1,value:()=>s.machines.reduce((a,b)=>a+b,0)},
+{id:'mechanised',name:'Fully equipped',desc:'Upgrade each of the three machines',icon:'⚙️',target:3,value:()=>s.machines.filter(n=>n>0).length},
+{id:'staff',name:'A helping hand',desc:'Hire your first farmhand',icon:'🧑‍🌾',target:1,value:()=>s.staff.reduce((a,b)=>a+b,0)},
+{id:'team',name:'Team effort',desc:'Hire ten members of staff',icon:'🤝',target:10,value:()=>s.staff.reduce((a,b)=>a+b,0)},
+{id:'management',name:'In good hands',desc:'Hire one of every staff role',icon:'📋',target:3,value:()=>s.staff.filter(n=>n>0).length},
+{id:'thousand',name:'Making a living',desc:'Earn £1,000 in total',icon:'💰',target:1000,value:()=>s.total},
+{id:'million',name:'Million-pound meadow',desc:'Earn £1 million in total',icon:'🏆',target:1e6,value:()=>s.total},
+{id:'pace',name:'Growing momentum',desc:'Earn £60,000 net per farm day',icon:'📈',target:60000,value:()=>rate()*DAY_SECONDS},
+{id:'family',name:'Putting down roots',desc:'Reach Family Farm level',icon:'🏡',target:2,value:()=>farmLevel()},
+{id:'world',name:'From meadow to world',desc:'Reach International Production',icon:'🌍',target:8,value:()=>farmLevel()}
+];
+let achievementTimer;
+function checkAchievements(){const unlocked=achievementDefs.filter(a=>!s.achievements.includes(a.id)&&a.value()>=a.target);if(!unlocked.length)return;unlocked.forEach(a=>s.achievements.push(a.id));const message=unlocked.length===1?'Achievement unlocked: '+unlocked[0].name:'Achievements unlocked: '+unlocked.map(a=>a.name).join(', ');log(message);$('toast').textContent=message;$('toast').style.opacity='1';clearTimeout(achievementTimer);achievementTimer=setTimeout(()=>$('toast').style.opacity='0',5000)}
+const machines=[{name:'Wheat tractor',icon:'🚜',base:200},{name:'Potato harvester',icon:'⚙️',base:1200},{name:'Maize combine',icon:'🚜',base:7000}];
+const machineCost=i=>machines[i].base*5**s.machines[i];
+function buyMachine(i,automated=false){return transact('machine',i,automated)}
+$('machinery').innerHTML=machines.map((m,i)=>'<div class="building"><div class="icon">'+m.icon+'</div><div><b>'+m.name+'</b><small id="machineDetail'+i+'"></small></div><button class="buy" id="machine'+i+'" aria-label="Upgrade '+m.name+'"></button></div>').join('');
+machines.forEach((m,i)=>$('machine'+i).onclick=()=>buyMachine(i));
+function buy(i,automated=false){return transact('production',i,automated)}
+function upgrade(automated=false){return transact('boost',0,automated)}
+
+const DAY_SECONDS=60;
+let pendingPurchase=null,lastDecisionFocus=null;
+function purchaseSpec(kind,i=0){
+if(kind==='production'&&types[i])return {name:types[i].name,price:cost(i),allowed:stageAllows('production',i),apply:()=>s.counts[i]++,undo:()=>s.counts[i]--};
+if(kind==='machine'&&machines[i])return {name:machines[i].name,price:machineCost(i),allowed:stageAllows('machine',i),apply:()=>s.machines[i]++,undo:()=>s.machines[i]--};
+if(kind==='staff'&&staffTypes[i])return {name:'Hire '+staffTypes[i].name,price:staffCost(i),allowed:stageAllows('staff',i),apply:()=>s.staff[i]++,undo:()=>s.staff[i]--};
+if(kind==='fertiliser')return {name:'Better fertiliser',price:fertiliserCost(),allowed:stageAllows('fertiliser'),apply:()=>s.fertiliser++,undo:()=>s.fertiliser--};
+if(kind==='efficiency')return {name:'Farm efficiency',price:efficiencyCost(),allowed:stageAllows('efficiency'),apply:()=>s.efficiency++,undo:()=>s.efficiency--};
+if(kind==='boost')return {name:'Whole-farm improvements',price:boostCost(),allowed:stageAllows('boost'),apply:()=>s.boost++,undo:()=>s.boost--};
+return null;
+}
+function forecast(kind,i=0){
+const spec=purchaseSpec(kind,i);if(!spec)return null;
+const grossBefore=grossRate(),costBefore=runningCosts().total,netBefore=rate();
+let grossAfter,costAfter,netAfter;
+spec.apply();try{grossAfter=grossRate();costAfter=runningCosts().total;netAfter=rate()}finally{spec.undo()}
+const dailyGain=(netAfter-netBefore)*DAY_SECONDS,remaining=s.money-spec.price,reserve=costAfter*DAY_SECONDS*s.reserveDays;
+return {name:spec.name,price:spec.price,allowed:spec.allowed,affordable:s.money>=spec.price,
+grossBefore:grossBefore*DAY_SECONDS,grossAfter:grossAfter*DAY_SECONDS,
+costBefore:costBefore*DAY_SECONDS,costAfter:costAfter*DAY_SECONDS,
+netBefore:netBefore*DAY_SECONDS,netAfter:netAfter*DAY_SECONDS,
+grossDelta:(grossAfter-grossBefore)*DAY_SECONDS,costDelta:(costAfter-costBefore)*DAY_SECONDS,
+dailyGain,remaining,reserve,lowReserve:remaining+1e-8<reserve,
+coverage:costAfter>0?Math.max(0,remaining)/(costAfter*DAY_SECONDS):Infinity,
+payback:dailyGain>1e-10?spec.price/dailyGain:Infinity};
+}
+const signed=n=>(n<0?'−':'+')+cash(Math.abs(n));
+function closeDecision(action='defer'){if(pendingPurchase&&action==='defer'){const f=forecast(pendingPurchase.kind,pendingPurchase.i);if(f)recordPurchase(pendingPurchase.kind,pendingPurchase.i,f,'defer',false)}pendingPurchase=null;$('purchaseDecision').hidden=true;document.querySelector('main').inert=false;last=Date.now();lastDecisionFocus?.focus?.()}
+function reviewPurchase(kind,i=0){if(s.pendingEvent||resetOpen)return false;
+const f=forecast(kind,i);if(!f||!f.allowed||!f.affordable)return false;
+$('purchaseReason').value='';pendingPurchase={kind,i};lastDecisionFocus=document.activeElement;
+$('decisionTitle').textContent=f.name;
+$('decisionUpfront').textContent=cash(f.price);
+$('decisionGross').textContent=signed(f.grossDelta)+'/day';
+$('decisionCosts').textContent=signed(f.costDelta)+'/day';
+$('decisionNet').textContent=signed(f.dailyGain)+'/day';
+$('decisionPayback').textContent=Number.isFinite(f.payback)?fmt(f.payback)+' farm days':'No payback at current output';
+$('decisionCash').textContent=cash(f.remaining);
+$('decisionReserve').textContent=cash(f.reserve)+' ('+s.reserveDays+' days of costs)';
+$('decisionCoverage').textContent=Number.isFinite(f.coverage)?fmt(f.coverage)+' days of costs covered':'No running costs';
+$('decisionBefore').textContent=cash(f.netBefore)+'/day';
+$('decisionAfter').textContent=cash(f.netAfter)+'/day';
+const warnings=[];
+if(s.activeEffect)warnings.push('A temporary event is active. This forecast uses current conditions; profit and payback may change when the event ends.');
+if(f.dailyGain<=0)warnings.push('This purchase does not increase profit at your current production level.');
+if(f.netAfter<0)warnings.push('The farm would run at a loss after this purchase.');
+if(f.lowReserve)warnings.push('Cash left would be below your '+s.reserveDays+'-day running-cost reserve.');
+$('decisionWarning').textContent=warnings.length?warnings.join(' '):'The purchase increases profit and leaves your selected cost reserve intact.';
+$('decisionWarning').className=warnings.length?'decision-warning':'decision-safe';
+$('decisionConfirm').textContent=warnings.length?'Buy anyway — accept the risk':'Buy now';
+$('purchaseDecision').hidden=false;document.querySelector('main').inert=true;$('decisionCancel').focus();return true;
+}
+function transact(kind,i=0,automated=false){
+if(automated!==true)return reviewPurchase(kind,i);
+const f=forecast(kind,i);if(!f||!f.allowed||!f.affordable)return false;
+const spec=purchaseSpec(kind,i);s.money-=spec.price;spec.apply();recordPurchase(kind,i,f,'buy',!pendingPurchase);
+log(spec.name+' purchased for '+cash(spec.price)+'. Net profit change: '+signed(f.dailyGain)+'/day.');
+render();save();return true;
+}
+$('decisionCancel').onclick=()=>closeDecision();
+$('decisionConfirm').onclick=()=>{if(!pendingPurchase)return;const {kind,i}=pendingPurchase;if(transact(kind,i,true))closeDecision('bought');else{$('decisionWarning').textContent='This purchase is no longer available. Close the forecast and review again.'}};
+$('purchaseDecision').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeDecision()}if(e.key==='Tab'){const first=$('decisionCancel'),lastButton=$('decisionConfirm');if(e.shiftKey&&document.activeElement===first){e.preventDefault();lastButton.focus()}else if(!e.shiftKey&&document.activeElement===lastButton){e.preventDefault();first.focus()}}});
+$('reserveSelect').value=s.reserveDays;$('reserveSelect').onchange=e=>{s.reserveDays=Number(e.target.value);render();save()};
+function autopilotStep(){if(s.pendingEvent)return false;
+const choices=[];
+const add=(kind,i=0)=>{const f=forecast(kind,i);if(f&&f.allowed&&f.affordable&&!f.lowReserve&&f.dailyGain>1e-10)choices.push({kind,i,score:f.dailyGain/f.price})};
+types.forEach((_,i)=>add('production',i));machines.forEach((_,i)=>add('machine',i));staffTypes.forEach((_,i)=>add('staff',i));add('fertiliser');add('efficiency');add('boost');
+choices.sort((a,b)=>b.score-a.score);if(choices.length)return transact(choices[0].kind,choices[0].i,true);return false;
+}
+// Temporary challenges use the same accounting functions as purchases.
+const eventDefs=[
+{id:'dry',icon:'☀️',category:'Weather',title:'A dry spell is forecast',eligible:()=>cropDaily()>0,
+options:d=>[
+{title:'Protect essentials; delay expansion',text:'Keep essential water use covered and postpone extra field work. Accept lower crop output during the dry spell.',mod:{crop:.75},cost:0,result:'Essential water was maintained. Crop income is 25% lower for three farm days; you have avoided an upfront payment.'},
+{title:'Use a watering contractor',text:'Bring in temporary watering support. Pay a daily service charge instead of buying equipment.',mod:{crop:.95,extraDaily:Math.max(1,d.crop*.08)},cost:0,result:'Temporary support protects most of the crop output, with a daily contractor bill. Crop income is 5% lower.'},
+{title:'Hire temporary irrigation',text:'Pay a setup fee and a smaller daily hire charge. This protects most output but uses cash now.',mod:{crop:1,extraDaily:Math.max(.5,d.crop*.02)},cost:Math.max(2,d.crop*.3),result:'You paid for irrigation setup and ongoing hire. The crop-output loss is fully countered for three farm days, but the setup and daily hire charges still reduce cash and profit.'}]},
+{id:'feed',icon:'🌾',category:'Input prices',title:'Feed prices have increased',eligible:()=>animalDaily()>0,
+options:d=>[
+{title:'Buy as needed',text:'Keep the normal feeding routine and pay the higher price. There is no extra upfront payment.',cost:0,mod:{animalSupply:1.25},result:'Suitable feeding continues. Livestock supply costs are 25% higher while the price increase lasts.'},
+{title:'Arrange a bulk delivery',text:'Pay a non-refundable delivery and storage fee now to secure a smaller price rise on daily supplies.',cost:Math.max(3,d.animalSupplies*2),mod:{animalSupply:1.1},result:'You paid a delivery and storage fee. Daily livestock supply costs rise by 10%, rather than 25%. The fee is not refunded later.'},
+{title:'Review waste with an adviser',text:'Pay for advice on storage and feed waste. Keep a suitable diet while limiting the cost increase.',cost:Math.max(2,d.animalSupplies*.5),mod:{animalSupply:1.15},result:'The waste review preserves suitable feeding. Livestock supply costs rise by 15%; you also paid an advice fee.'}]},
+{id:'market',icon:'📉',category:'Market prices',title:'Buyers are paying less',eligible:()=>baseGrossRate()>0,
+options:d=>[
+{title:'Keep the usual buyer',text:'Use your existing route with no additional selling fees. Accept the lower price for now.',cost:0,mod:{price:.8},result:'You kept the usual buyer and avoided new fees. Gross sales income is 20% lower for three farm days.'},
+{title:'Sell at a local market',text:'Reach local customers, but pay daily transport and stall costs.',cost:0,mod:{price:.95,extraDaily:Math.max(1,d.gross*.08)},result:'Local sales limit the price fall to 5%, with daily transport and stall charges.'},
+{title:'Join a short buyer agreement',text:'Pay an arrangement fee for a buyer offering a smaller price fall.',cost:Math.max(2,d.gross*.05),mod:{price:.9},result:'You paid an arrangement fee. Sale prices fall by 10%, with no extra daily selling charge.'}]},
+{id:'machine',icon:'🔧',category:'Machinery',title:'A machine needs attention',eligible:()=>s.machines.some(n=>n>0),
+options:d=>[
+{title:'Repair before further use',text:'Pay for a competent repair and safety check now. Normal crop output can continue.',cost:Math.max(5,d.crop*.7),mod:{},result:'A competent repair and check were funded before use. Normal crop output continues; the repair fee has reduced your cash.'},
+{title:'Use a contractor',text:'Keep the faulty machine out of use and pay a contractor daily to complete most work.',cost:0,mod:{crop:.95,extraDaily:Math.max(2,d.crop*.12)},result:'The contractor keeps most work moving. Crop income is 5% lower, with a daily service charge.'},
+{title:'Delay non-essential crop work',text:'Leave the machine out of use and carry on essential tasks with safe alternatives. Accept lower crop output.',cost:0,mod:{crop:.7},result:'The unsafe machine remains out of use. Delayed work reduces crop income by 30% for three farm days.'}]},
+{id:'welfare',icon:'🩺',category:'Animal welfare',title:'An animal needs closer attention',eligible:()=>s.counts.slice(3,6).some(n=>n>0),
+options:d=>[
+{title:'Arrange professional support now',text:'Report the concern and arrange suitable professional support, including a vet where needed. Pay the visit fee now.',cost:Math.max(5,d.animal*.25),mod:{animal:.98},result:'The concern was reported and professional support funded. Essential care continues. The model allows a 2% livestock income reduction during recovery.'},
+{title:'Use supported daily checks',text:'Report promptly and follow the responsible person’s plan, including veterinary advice where needed. Pay for extra daily support.',cost:0,mod:{animal:.9,extraDaily:Math.max(1,d.animal*.15)},result:'The concern was reported and a supported care plan put in place. Extra daily support is charged, with 10% lower livestock income during recovery.'}]},
+{id:'rain',icon:'🌧️',category:'Weather',title:'Heavy rain has left fields wet',eligible:()=>cropDaily()>0,
+options:d=>[
+{title:'Wait for suitable ground conditions',text:'Delay non-essential field traffic and protect the soil. Accept a temporary drop in crop output.',cost:0,mod:{crop:.8},result:'You avoided unnecessary traffic on wet ground. Crop income falls by 20% for three farm days.'},
+{title:'Inspect drainage and plan work',text:'Pay for a competent inspection and a suitable work plan. Protect most crop output.',cost:Math.max(2,d.crop*.4),mod:{crop:.95},result:'The inspection and work plan protect most output. You paid a fee, and crop income is 5% lower during the wet period.'},
+{title:'Use suitable contractor support',text:'Use a competent contractor where ground conditions allow. Pay a daily service charge.',cost:0,mod:{crop:.9,extraDaily:Math.max(1,d.crop*.06)},result:'Contractor support limits the crop income reduction to 10%, with a daily charge. Unsafe or unsuitable field work is still delayed.'}]},
+{id:'energy',icon:'⚡',category:'Running costs',title:'Energy prices are rising',eligible:()=>baseGrossRate()>0,
+options:d=>[
+{title:'Maintain essential services',text:'Keep normal services running and pay the temporary increase. Avoid a new upfront payment.',cost:0,mod:{energy:1.5},result:'Essential services continue. The utilities portion of running costs is 50% higher during the price rise.'},
+{title:'Check and reduce avoidable waste',text:'Pay for a short efficiency review while keeping essential services operating.',cost:Math.max(2,d.utilities),mod:{energy:1.15},result:'You paid for the review. The utilities portion rises by 15% rather than 50%; essential services remain in use.'},
+{title:'Hire efficient temporary equipment',text:'Use suitable temporary equipment with a daily hire charge. Keep the utilities increase smaller.',cost:0,mod:{energy:1.1,extraDaily:Math.max(.5,d.utilities*.2)},result:'Temporary equipment limits the utilities price impact to 10%, with an additional daily hire charge.'}]},
+{id:'order',icon:'🧺',category:'Opportunity',title:'A local buyer offers an order',eligible:()=>baseGrossRate()>0,
+options:d=>[
+{title:'Keep existing customers',text:'Continue with your usual sales. No extra charges, and no price bonus.',cost:0,mod:{},result:'You kept the existing arrangements. Prices and running costs remain unchanged.'},
+{title:'Deliver the order yourself',text:'Sell for a higher price, with a daily delivery and handling charge.',cost:0,mod:{price:1.15,extraDaily:Math.max(1,d.gross*.08)},result:'The order brings a 15% price bonus for three farm days, less daily delivery and handling charges.'},
+{title:'Use a shared delivery group',text:'Pay a setup fee and share delivery work. The price bonus is smaller, with a lower daily charge.',cost:Math.max(2,d.gross*.05),mod:{price:1.1,extraDaily:Math.max(.5,d.gross*.02)},result:'Shared deliveries bring a 10% price bonus, a setup fee and a smaller daily transport charge.'}]}
+];
+function cropDaily(){return types.reduce((sum,_,i)=>sum+(i<3||i===7?baseEnterpriseRate(i):0),0)*DAY_SECONDS}
+function animalDaily(){return baseGrossRate()*DAY_SECONDS-cropDaily()}
+function eventData(){const factor=Math.max(.35,.85**s.efficiency);return {crop:cropDaily(),animal:animalDaily(),gross:baseGrossRate()*DAY_SECONDS,animalSupplies:animalDaily()*.25*factor,utilities:baseGrossRate()*DAY_SECONDS*.05*factor}}
+const eventLearning={
+dry:{description:'There has been little rain, and a three-day dry spell could reduce your crop income by 25%. Essential drinking water and animal care continue in every option. Decide whether protecting more crop output is worth a setup fee or daily watering charge.',
+prompts:['What needs water first?','Compare the crop income protected with the full three-day watering cost.','Will paying now leave enough cash for other bills?','What would you do if the dry spell lasted longer?']},
+feed:{description:'Your supplier has raised feed and livestock supply prices by 25% for three farm days. Animals must still receive a suitable, balanced diet. You can pay as supplies are used, pay a delivery and storage fee for a bulk arrangement, or pay for advice on reducing waste.',
+prompts:['Why must suitable feeding continue?','Which option has the lowest total cost over three days?','How much cash would be tied up before savings are made?','How could you reduce waste without reducing nutrition or welfare?']},
+market:{description:'Buyers are paying 20% less for produce for three farm days. Your seed, feed, wages and upkeep do not become cheaper when selling prices fall. You can accept the lower price or use another selling route, but transport, stalls and arrangement fees reduce the benefit.',
+prompts:['Which bills still need paying when sales income falls?','Compare net profit after selling fees, not just the price offered.','Which route leaves the strongest cash reserve?','What is the risk of depending on one buyer?']},
+machine:{description:'A machine has a fault and must stay out of use until it is safe. Delayed work could reduce crop income by 30% for three farm days. Decide whether to pay for a competent repair now, pay a contractor daily, or delay non-essential work while keeping essential tasks going safely.',
+prompts:['Why must faulty equipment stay out of use?','Compare the repair fee with three days of contractor charges.','How much income would delayed crop work lose?','How could preventative maintenance reduce future disruption?']},
+welfare:{description:'An animal seems unwell during a routine check. Report the concern promptly to the responsible person and arrange appropriate professional advice, including a vet where needed. Normal feed, water and care must continue. Compare paying for a visit now with funding extra supported checks; these are management decisions, not diagnosis or treatment instructions.',
+prompts:['Who should you tell, and what essential care must continue?','Why must necessary professional advice not be delayed for financial reasons?','What extra costs and temporary production changes should you budget for?','How would you record checks and communicate concerns?']},
+rain:{description:'Heavy rain has left fields wet for three farm days. Unsuitable field traffic can damage the soil, so unsafe or unsuitable work is delayed in every option. You can protect the ground and accept 20% lower crop income, pay for a drainage inspection and work plan, or use suitable contractor support.',
+prompts:['Which jobs could wait until ground conditions improve?','How could soil damage affect future production?','Compare the cash spent now with the crop income protected.','Why should drainage planning consider water quality and site conditions?']},
+energy:{description:'Electricity and fuel for farm services cost more. The utilities portion of running costs rises by 50% for three farm days. Essential water, ventilation, lighting and animal care stay operating in every option. Decide whether to pay the rise, fund a waste review, or hire efficient temporary equipment.',
+prompts:['Which services must stay on, and where could energy be wasted?','Which option has the lowest total three-day cost?','Would paying the upfront review fee leave enough cash for other bills?','Why is switching off essential welfare systems not an acceptable saving?']},
+order:{description:'A local buyer offers a short sales opportunity lasting three farm days. A higher selling price can increase income, but delivery, handling and setup fees reduce the extra profit. Compare keeping your existing customers, delivering the order yourself, or joining a shared delivery group.',
+prompts:['What extra jobs and costs would the order create?','Does the price bonus still increase net profit after all fees?','Would a setup fee leave enough cash for other bills?','What would you check before agreeing to supply the buyer?']}
+};
+function effectLabel(id,index){
+if(id==='order')return index===0?'No buff or debuff':'Buff · higher sale prices';
+if((id==='dry'&&index===2)||(id==='machine'&&index===0))return 'Full counter · output protected';
+if(index===0&&id!=='welfare')return 'Debuff · accept temporary impact';
+return 'Partial counter · reduced impact';
+}
+function effectDescription(mod){
+const parts=[];
+const percentage=(value,subject)=>{if(value!==undefined&&value!==1)parts.push(subject+' '+(value>1?'+':'−')+fmt(Math.abs(value-1)*100)+'%')};
+percentage(mod.crop,'Crop income');percentage(mod.animal,'Livestock income');percentage(mod.price,'Sale prices');
+percentage(mod.cropSupply,'Crop supply costs');percentage(mod.animalSupply,'Livestock supply costs');percentage(mod.energy,'Utilities costs');percentage(mod.upkeep,'Upkeep');
+if(mod.extraDaily)parts.push('Extra service costs '+cash(mod.extraDaily)+'/day');
+return parts.length?parts.join(' · '):'Normal output and normal running costs';
+}
+function eventOptions(def){return def.options(eventData())}
+const escapeText=text=>String(text??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function eventForecast(option){const old=s.activeEffect;const beforeNet=rate()*DAY_SECONDS;let afterNet,costs;
+s.activeEffect={mod:option.mod,until:s.simSeconds+180};try{afterNet=rate()*DAY_SECONDS;costs=runningCosts().total*DAY_SECONDS}finally{s.activeEffect=old}
+return {beforeNet,afterNet,costs,cashAfter:s.money-option.cost,threeDayNet:afterNet*3-option.cost,reserve:costs*s.reserveDays};
+}
+function eligibleEvents(){return eventDefs.filter(d=>d.eligible())}
+function startEvent(id,automatic=false){
+if(s.pendingEvent||pendingPurchase||resetOpen||s.activeEffect)return false;
+const def=eventDefs.find(d=>d.id===id);if(!def||!def.eligible())return false;
+s.pendingEvent={id:def.id,phase:'choose',day:Math.floor(s.simSeconds/60)+1,automatic};s.eventSequence++;s.lastEventId=def.id;
+$('welcome').hidden=true;showEvent();save();return true;
+}
+function triggerAutomaticEvent(){
+const eligible=eligibleEvents();if(!eligible.length){s.nextEventAt=s.simSeconds+randomEventDelay();return false}
+const different=eligible.filter(d=>d.id!==s.lastEventId),pool=different.length?different:eligible;
+return startEvent(pool[Math.floor(Math.random()*pool.length)].id,true);
+}
+
+function showEvent(){
+const pending=s.pendingEvent;if(!pending)return;
+const def=eventDefs.find(d=>d.id===pending.id);
+if(!def){s.pendingEvent=null;save();return}
+document.querySelector('main').inert=true;$('eventDialog').hidden=false;
+$('eventCategory').textContent=def.icon+' '+def.category+' · Farm day '+pending.day+' · Simulation paused';
+$('eventTitle').textContent=def.title;$('eventDescription').textContent=eventLearning[def.id].description;
+$('eventSituation').textContent='Current balance: '+cash(s.money)+' · Current net profit: '+cash(rate()*60)+'/day · Choice effects last 3 farm days.';
+const prompts=eventLearning[def.id].prompts;
+$('eventPrompts').innerHTML='<b>Think, calculate and explain</b><ul>'+prompts.map(p=>'<li>'+escapeText(p)+'</li>').join('')+'</ul><p class="muted"><b>Net profit</b> = sales income minus running costs. <b>Cash left</b> = money available after the upfront payment. <b>Three-day net cash result</b> = three days of net profit minus the upfront fee.</p>';
+
+const outcome=pending.phase==='outcome';
+$('eventChoices').hidden=outcome;$('eventReasonBox').hidden=outcome;$('eventOutcome').hidden=!outcome;
+if(outcome){
+const entry=s.decisionJournal.find(e=>e.key===pending.entryKey);
+if(!entry){s.pendingEvent=null;document.querySelector('main').inert=false;$('eventDialog').hidden=true;return}
+$('eventReflection').value=entry.reflection??'';
+$('eventOutcomeTitle').textContent='You chose: '+entry.choice;
+$('eventOutcomeText').textContent=(entry.effectLabel?entry.effectLabel+' — ':'')+entry.result;
+$('eventOutcomeFigures').innerHTML=[['Paid now',cash(entry.paid)],['Net profit before',cash(entry.beforeNet)+'/day'],['Net profit during event',cash(entry.afterNet)+'/day'],['Cash left',cash(entry.cashAfter)]].map(([label,value])=>'<div><dt>'+escapeText(label)+'</dt><dd>'+escapeText(value)+'</dd></div>').join('');
+$('eventContinue').focus();return;
+}
+$('eventReason').value=pending.reason??'';
+const choices=eventOptions(def);
+$('eventChoices').innerHTML=choices.map((option,i)=>{const f=eventForecast(option),afford=s.money>=option.cost;return '<article class="event-choice"><div class="effect-badge">'+escapeText(effectLabel(def.id,i))+'</div><h3>'+escapeText(option.title)+'</h3><p>'+escapeText(option.text)+'</p><p class="effect-description"><b>3-day effect:</b> '+escapeText(effectDescription(option.mod))+'</p><div class="choice-cost"><b>Pay now: '+cash(option.cost)+'</b><br>Net profit during event: '+cash(f.afterNet)+'/day<br>Cash left: '+cash(f.cashAfter)+'<br>Total running costs: '+cash(f.costs)+'/day<br>3-day net cash result: '+cash(f.threeDayNet)+'<br>'+(!afford?'Not enough cash for the upfront fee':f.cashAfter<f.reserve?'Below your selected cost reserve':'Selected cost reserve covered')+'</div><button class="buy" id="eventChoice'+i+'" '+(!afford?'disabled':'')+'>Choose this response</button></article>'}).join('');
+choices.forEach((_,i)=>$('eventChoice'+i).onclick=()=>chooseEvent(i));
+$('eventChoice'+choices.findIndex(o=>s.money>=o.cost)).focus();
+}
+function chooseEvent(index){
+if(!s.pendingEvent||s.pendingEvent.phase!=='choose')return false;
+const def=eventDefs.find(d=>d.id===s.pendingEvent.id),option=def&&eventOptions(def)[index];
+if(!option||s.money<option.cost)return false;
+const f=eventForecast(option),key='event-'+s.eventSequence+'-'+s.simSeconds;
+s.money-=option.cost;
+s.activeEffect={id:def.id,title:def.title,choice:option.title,label:effectLabel(def.id,index),mod:{...option.mod},until:s.simSeconds+180};
+const entry={key,day:s.pendingEvent.day,title:def.title,choice:option.title,reason:$('eventReason').value.slice(0,600),reflection:'',effectLabel:effectLabel(def.id,index),effectDescription:effectDescription(option.mod),result:option.result,paid:option.cost,beforeNet:f.beforeNet,afterNet:f.afterNet,cashAfter:s.money,threeDayNet:f.threeDayNet,finished:false};
+s.decisionJournal.unshift(entry);s.decisionJournal=s.decisionJournal.slice(0,50);
+s.pendingEvent.phase='outcome';s.pendingEvent.entryKey=key;
+log('Event decision: '+option.title+'. '+option.result);
+render();showEvent();save();return true;
+}
+function continueEvent(){
+if(!s.pendingEvent||s.pendingEvent.phase!=='outcome')return false;
+const entry=s.decisionJournal.find(e=>e.key===s.pendingEvent.entryKey);if(entry)entry.reflection=$('eventReflection').value.slice(0,600);
+$('eventReflection').value='';s.pendingEvent=null;s.nextEventAt=(s.activeEffect?.until??s.simSeconds)+randomEventDelay();
+$('eventDialog').hidden=true;document.querySelector('main').inert=false;last=Date.now();render();save();$('farmChallenges').focus();return true;
+}
+function finishEffect(){if(!s.activeEffect)return;const effect=s.activeEffect;s.activeEffect=null;const entry=s.decisionJournal.find(e=>e.title===effect.title&&!e.finished);if(entry)entry.finished=true;log('Event ended: '+effect.title+'. Normal conditions resume.')}
+function advanceSimulation(seconds){
+let remaining=Math.max(0,Math.min(seconds,43200)),advanced=0;
+while(remaining>1e-8&&!s.pendingEvent){
+if(s.activeEffect&&s.activeEffect.until<=s.simSeconds+1e-8)finishEffect();
+if(s.eventsEnabled&&!s.activeEffect&&s.nextEventAt<=s.simSeconds+1e-8){triggerAutomaticEvent();if(s.pendingEvent)break}
+const untilEffect=s.activeEffect?Math.max(0,s.activeEffect.until-s.simSeconds):Infinity;
+const untilEvent=s.eventsEnabled&&!s.activeEffect?Math.max(0,s.nextEventAt-s.simSeconds):Infinity;
+const step=Math.min(remaining,untilEffect,untilEvent);if(step<=1e-8)break;
+const net=rate(),gross=grossRate();s.simSeconds+=step;earn(step*net,step*gross);remaining-=step;advanced+=step;
+}
+if(s.activeEffect&&s.activeEffect.until<=s.simSeconds+1e-8)finishEffect();
+if(s.eventsEnabled&&!s.activeEffect&&!s.pendingEvent&&s.nextEventAt<=s.simSeconds+1e-8)triggerAutomaticEvent();
+return advanced;
+}
+let lastJournalMarkup='';
+function renderEventStatus(){
+$('activeEventStatus').textContent=s.activeEffect?'Active: '+s.activeEffect.title+' · '+s.activeEffect.choice+' · '+(s.activeEffect.label??'Temporary effect')+' · '+effectDescription(s.activeEffect.mod)+' · '+fmt(Math.max(0,s.activeEffect.until-s.simSeconds)/60)+' farm days remaining':'Unexpected farm events can happen during play. Keep cash available and be ready to decide.';
+
+const journal=s.decisionJournal.length?s.decisionJournal.slice(0,20).map(e=>'<details class="journal-entry"><summary>Day '+e.day+' · '+escapeText(e.title)+' — '+escapeText(e.choice)+'</summary><p><b>'+escapeText(e.effectLabel??'Temporary event effect')+'</b> · '+escapeText(e.effectDescription??'')+'</p><p>'+escapeText(e.result)+'</p><p>Paid: '+cash(e.paid)+' · Net profit: '+cash(e.beforeNet)+' → '+cash(e.afterNet)+'/day · '+(e.finished?'Effect completed':'Effect active')+'</p><p><b>My reason:</b> '+escapeText(e.reason||'No reason recorded.')+'</p><p><b>Reflection:</b> '+escapeText(e.reflection||'No reflection recorded.')+'</p><p class="muted">This records the forecast at decision time. Later purchases can change actual results.</p></details>').join(''):'<p class="muted">No event decisions yet. A random event will appear during play.</p>';
+if(journal!==lastJournalMarkup){$('decisionJournal').innerHTML=journal;lastJournalMarkup=journal}
+}
+$('eventContinue').onclick=continueEvent;$('eventReset').onclick=()=>openReset();
+$('eventReason').oninput=e=>{if(s.pendingEvent){s.pendingEvent.reason=e.target.value.slice(0,600);save()}};
+$('eventReflection').oninput=e=>{if(s.pendingEvent){const entry=s.decisionJournal.find(x=>x.key===s.pendingEvent.entryKey);if(entry){entry.reflection=e.target.value.slice(0,600);save()}}};
+$('eventDialog').addEventListener('keydown',e=>{
+if(e.key==='Tab'){const buttons=Array.from($('eventDialog').querySelectorAll('button:not(:disabled),textarea')).filter(el=>!el.closest('[hidden]'));const first=buttons[0],lastButton=buttons[buttons.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();lastButton?.focus()}else if(!e.shiftKey&&document.activeElement===lastButton){e.preventDefault();first?.focus()}}
+});
+
+let guideOpen=false,reportOpen=false;
+function pauseState(){return !!(s.lessonPaused||guideOpen||reportOpen||pendingPurchase||resetOpen||s.pendingEvent||document.hidden)}
+function restoreMainFocus(target){document.querySelector('main').inert=false;last=Date.now();$(target).focus()}
+function showGuide(){if(pendingPurchase||resetOpen||s.pendingEvent||reportOpen)return;guideOpen=true;document.querySelector('main').inert=true;$('guideDialog').hidden=false;$('guideStart').focus()}
+function closeGuide(){guideOpen=false;s.hasSeenGuide=true;$('guideDialog').hidden=true;restoreMainFocus('helpButton');save();render()}
+function updateClassroom(){
+$('pauseButton').textContent=s.lessonPaused?'▶ Resume':'Ⅱ Pause';$('pauseButton').setAttribute('aria-pressed',s.lessonPaused?'true':'false');
+$('unpaidBills').textContent=cash(s.unpaidBills);$('debtStatus').hidden=s.unpaidBills<1e-8;$('debtStatus').textContent='Unpaid bills: '+cash(s.unpaidBills)+'. Future cash pays these first. Expansion purchases are paused until they are paid.';
+$('playStatus').textContent=s.lessonPaused?'Paused — your farm and bills are on hold.':'Play time only · The farm pauses when this tab is hidden or closed.';
+const manual=s.purchaseJournal.filter(e=>!e.automated&&e.action==='buy');
+const explained=s.decisionJournal.filter(e=>e.reason&&e.reflection);
+const goals=[{text:'Compare a forecast and make one purchase yourself',done:manual.length>=1},{text:'Reach Smallholding by developing your wheat enterprise',done:farmLevel()>=1},{text:'Respond to two random events',done:s.decisionJournal.length>=2},{text:'Record a reason and reflection for an event',done:explained.length>=1}];
+$('lessonObjectives').innerHTML=goals.map(g=>'<div class="requirement"><span>'+(g.done?'✓':'○')+' '+g.text+'</span><b>'+(g.done?'Done':'To do')+'</b></div>').join('');
+}
+function recordPurchase(kind,i,f,action,automated=false){
+s.purchaseJournal.unshift({day:Math.floor(s.simSeconds/60)+1,name:f.name,action,automated,price:f.price,dailyGain:f.dailyGain,cashAfter:s.money,reason:automated?'Autopilot selected this upgrade.':$('purchaseReason').value.slice(0,600)});s.purchaseJournal=s.purchaseJournal.slice(0,100);
+}
+function reportText(){
+const lines=['MEADOW — FARM DECISIONS','Student learning report (simplified simulation)','Farm day: '+(Math.floor(s.simSeconds/60)+1),'Farm stage: '+stages[farmLevel()].name,'Cash balance: '+cash(s.money),'Sales income: '+cash(grossRate()*60)+'/day','Running costs: '+cash(runningCosts().total*60)+'/day','Net profit: '+cash(rate()*60)+'/day','Cost reserve target: '+cash(runningCosts().total*60*s.reserveDays)+' ('+s.reserveDays+' days)','Lifetime sales: '+cash(s.total),'Unpaid bills: '+cash(s.unpaidBills),'','YOUR FARM',...types.map((t,i)=>t.name+': '+s.counts[i]),'','PURCHASE DECISIONS',...s.purchaseJournal.map(e=>'Day '+e.day+' | '+e.name+' | '+(e.action==='buy'?'Bought':'Saved for later')+(e.automated?' (autopilot)':'')+' | Price '+cash(e.price)+' | Extra net profit '+signed(e.dailyGain)+'/day\nReason: '+(e.reason||'Not recorded.')),'','EVENT DECISIONS',...s.decisionJournal.map(e=>'Day '+e.day+' | '+e.title+'\nChoice: '+e.choice+'\nEffect: '+(e.effectLabel||'Temporary effect')+'\nOutcome: '+e.result+'\nPaid: '+cash(e.paid)+' | Net profit '+cash(e.beforeNet)+' → '+cash(e.afterNet)+'/day\nReason: '+(e.reason||'Not recorded.')+'\nReflection: '+(e.reflection||'Not recorded.')),'','END-OF-SESSION REFLECTION','1. Which decision did you make and why?\n'+(s.lessonNotes.decision||'Not answered.'),'2. How did costs, cash flow or welfare affect your choice?\n'+(s.lessonNotes.costs||'Not answered.'),'3. What would you do differently next time?\n'+(s.lessonNotes.next||'Not answered.'),'','This report records modelled figures and learner explanations. It is not a grade or a real-farm budget. No report is sent to a teacher automatically.'];
+return lines.join('\n');
+}
+function showReport(){if(pendingPurchase||resetOpen||s.pendingEvent||guideOpen)return;reportOpen=true;document.querySelector('main').inert=true;$('reportDialog').hidden=false;$('reportSnapshot').textContent='Day '+(Math.floor(s.simSeconds/60)+1)+' · '+stages[farmLevel()].name+' · Cash '+cash(s.money)+' · Unpaid bills '+cash(s.unpaidBills)+' · Net profit '+cash(rate()*60)+'/day';$('reportChoices').textContent=s.purchaseJournal.filter(e=>!e.automated&&e.action==='buy').length+' manual purchases · '+s.decisionJournal.length+' event decisions';for(const key of ['decision','costs','next'])$('report_'+key).value=s.lessonNotes[key]||'';$('report_decision').focus()}
+function closeReport(){reportOpen=false;$('reportDialog').hidden=true;restoreMainFocus('reportButton');save();render()}
+function downloadReport(){save();const blob=new Blob([reportText()],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='Meadow_Farm_Report_Day_'+(Math.floor(s.simSeconds/60)+1)+'.txt';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);$('reportDownloadStatus').textContent='Report download requested. Keep this file and submit it as your tutor asks.'}
+function classroomTrap(dialog,close){dialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close()}if(e.key==='Tab'){const items=Array.from(dialog.querySelectorAll('button:not(:disabled),textarea,a[href]')).filter(x=>!x.closest('[hidden]'));const first=items[0],lastItem=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();lastItem?.focus()}else if(!e.shiftKey&&document.activeElement===lastItem){e.preventDefault();first?.focus()}}})}
+$('helpButton').onclick=showGuide;$('guideStart').onclick=closeGuide;
+$('pauseButton').onclick=()=>{s.lessonPaused=!s.lessonPaused;last=Date.now();render();save()};
+$('reportButton').onclick=showReport;$('reportClose').onclick=closeReport;$('downloadReport').onclick=downloadReport;
+for(const key of ['decision','costs','next'])$('report_'+key).oninput=e=>{s.lessonNotes[key]=e.target.value.slice(0,1000);save()};
+classroomTrap($('guideDialog'),closeGuide);classroomTrap($('reportDialog'),closeReport);
+if(document.addEventListener)document.addEventListener('visibilitychange',()=>{last=Date.now();save()});
+
+$('buildings').innerHTML=types.map((t,i)=>`<div class="building"><div class="icon">${t.icon}</div><div><b>${t.name}</b><small>${t.desc}</small><small id="detail${i}"></small></div><button class="buy" id="buy${i}" aria-label="Buy ${t.name}"></button></div>`).join('');types.forEach((t,i)=>$('buy'+i).onclick=()=>buy(i));function render(){advanceGrowth();checkAchievements();renderEventStatus();updateClassroom();
+const expenses=runningCosts();$('gross').textContent=cash(grossRate()*DAY_SECONDS);$('costs').textContent=cash(expenses.total*DAY_SECONDS);
+$('farmDay').textContent='Farm day '+(Math.floor(s.simSeconds/DAY_SECONDS)+1);
+$('cashReserve').textContent=cash(expenses.total*DAY_SECONDS*s.reserveDays);
+$('reserveStatus').textContent=s.money>=expenses.total*DAY_SECONDS*s.reserveDays?'Reserve covered':'Below reserve — consider saving';
+$('reserveStatus').className=s.money>=expenses.total*DAY_SECONDS*s.reserveDays?'decision-safe':'decision-warning';
+$('reserveSelect').value=s.reserveDays;
+$('eventCost').textContent=cash(expenses.event*DAY_SECONDS)+'/day';$('supplyCost').textContent=cash(expenses.supplies*DAY_SECONDS)+'/day';$('wageCost').textContent=cash(expenses.wages*DAY_SECONDS)+'/day';$('upkeepCost').textContent=cash(expenses.upkeep*DAY_SECONDS)+'/day';
+$('efficiencyDetail').textContent='Level '+s.efficiency+' · '+Math.round((1-Math.max(.35,.85**s.efficiency))*100)+'% lower running costs';
+$('efficiencyBuy').textContent=s.efficiency>=7?'Max level':'Review · '+cash(efficiencyCost());$('efficiencyBuy').disabled=!stageAllows('efficiency')||s.money<efficiencyCost();if(!stageAllows('efficiency'))$('efficiencyBuy').textContent=s.efficiency>=7?'Max level':'Next farm stage';
+$('profitWarning').textContent=rate()<0?'Your farm is making a loss. Add production or improve efficiency to cover the costs.':'Your farm is profitable. Purchases are paid from net earnings.';
+
+$('fertiliserDetail').textContent='Level '+s.fertiliser+' · ×'+fmt(1.15**s.fertiliser)+' crop income';
+$('fertiliserBuy').textContent='Review · '+cash(fertiliserCost());$('fertiliserBuy').disabled=!stageAllows('fertiliser')||s.money<fertiliserCost();if(!stageAllows('fertiliser'))$('fertiliserBuy').textContent='Next farm stage';
+$('achievementCount').textContent=achievementDefs.filter(a=>s.achievements.includes(a.id)).length+' / '+achievementDefs.length+' unlocked';
+$('achievements').innerHTML=achievementDefs.map(a=>{const done=s.achievements.includes(a.id),n=Math.min(a.target,a.value()),pct=Math.min(100,n/a.target*100);return '<div class="achievement '+(done?'earned':'')+'"><div class="row"><span style="font-size:23px">'+a.icon+'</span><span class="muted">'+(done?'✓ Unlocked':fmt(n)+' / '+fmt(a.target))+'</span></div><b>'+a.name+'</b><p class="muted">'+a.desc+'</p><div class="progress"><i style="width:'+pct+'%"></i></div></div>'}).join('');
+staffTypes.forEach((m,i)=>{$('staffBuy'+i).textContent='Review · '+cash(staffCost(i));$('staffBuy'+i).disabled=!stageAllows('staff',i)||s.money<staffCost(i);if(!stageAllows('staff',i))$('staffBuy'+i).textContent='🔒 '+stages[[1,3,5][i]].name;$('staffDetail'+i).textContent=s.staff[i]+' hired · '+(i===2?Math.round(s.staff[i]*10):s.staff[i]*25)+'% '+m.group+' bonus · '+cash([.02,.08,.3][i]*Math.max(.35,.85**s.efficiency)*DAY_SECONDS)+'/day wage each'});
+$('money').textContent=cash(s.money);$('rate').textContent=cash(rate()*DAY_SECONDS)+' /day';$('total').textContent=cash(s.total);$('auto').classList.toggle('on',s.auto);$('auto').textContent='● Autopilot '+(s.auto?'on':'off');$('auto').setAttribute('aria-pressed',s.auto);types.forEach((t,i)=>{$('detail'+i).textContent=(unlocked(i)?'Lv. '+s.counts[i]+' · +'+cash(t.rate*1.2**s.boost*(i<3?1.35**s.machines[i]:1)*staffMultiplier(i)*.2*DAY_SECONDS*(i<3||i===7?effectValue('crop'):effectValue('animal'))*effectValue('price'))+'/day gross each':'🔒 Unlocks at '+stages[unlockLevels[i]].name+(s.counts[i]?' · '+s.counts[i]+' owned, still producing':''));$('buy'+i).textContent=unlocked(i)?'Review · '+cash(cost(i)):'Locked';$('buy'+i).disabled=!stageAllows('production',i)||s.money<cost(i);if(s.counts[i]>=productionCap){$('buy'+i).textContent='Capacity reached';$('detail'+i).textContent+=' · Max 20 units'}});$('boost').textContent='Review · '+cash(boostCost());$('boost').disabled=!stageAllows('boost')||s.money<boostCost();if(!stageAllows('boost'))$('boost').textContent=s.boost>=8?'Max level':'Next farm stage';$('boostLabel').textContent='Whole-farm improvements · ×'+fmt(1.2**s.boost)+' income';machines.forEach((m,i)=>{$('machine'+i).textContent='Review · '+cash(machineCost(i));$('machine'+i).disabled=!stageAllows('machine',i)||s.money<machineCost(i);if(s.counts[i]>0&&!stageAllows('machine',i))$('machine'+i).textContent='Next farm stage';$('machineDetail'+i).textContent='Lv. '+s.machines[i]+' · ×'+fmt(1.35**s.machines[i])+' '+types[i].name.toLowerCase()+' income'+(s.counts[i]?' · Stage limit '+upgradeLimit('machine',i):' · Buy field first')});
+const level=farmLevel();updateScene(level);const current=stages[level],next=stages[level+1];
+$('farmStage').textContent=current.icon+' LEVEL '+(level+1)+' · '+current.name.toUpperCase();
+$('goalTitle').textContent='Level '+(level+1)+' · '+current.name;
+$('goalDesc').textContent=current.desc+(next?' Next: '+next.name+' — meet the growth checklist above.':' You have reached the highest farm level. Keep growing your global operation!');
+const requirements=next?stageRequirements(level+1):[];
+const pct=next?requirements.reduce((sum,r)=>sum+Math.min(1,r.current/r.target),0)/requirements.length*100:100;
+$('goalCount').textContent=next?Math.floor(pct)+'% of requirements':'Maximum level';
+$('bar').style.width=pct+'%';
+$('goalReward').textContent=next?'✦ Next unlocks: '+unlockDescriptions[level+1]:'✦ International Production achieved';
+$('stageUnlock').textContent='Current stage unlocks: '+unlockDescriptions[level];
+$('growthChecklist').innerHTML=next?'<h2>Next milestone: '+next.name+'</h2><p class="muted">Meet every requirement to grow. Income alone cannot skip stages.</p>'+requirements.map(r=>'<div class="requirement"><span>'+(r.current>=r.target?'✓':'○')+' '+r.label+'</span><b>'+fmt(Math.min(r.current,r.target))+' / '+fmt(r.target)+'</b></div>').join(''):'<h2>International Production achieved</h2><p>You have built a diverse farm business. All final improvement tiers are unlocked.</p>';
+
+$('levels').innerHTML=stages.map((stage,i)=>'<div class="row" style="padding:12px 0;border-top:1px solid #edf0e7;opacity:'+(i>level?'.55':'1')+'"><div><b style="font-size:13px">'+stage.icon+' '+(i+1)+'. '+stage.name+'</b><small class="muted" style="display:block;margin-top:4px">'+(stage.at?cash(stage.at)+' sales + farm requirements':'Your starting farm')+' · Unlocks: '+unlockDescriptions[i]+'</small></div><span class="muted">'+(i<level?'✓ Reached':i===level?'● Current':'Locked')+'</span></div>').join('');
+}function save(){s.stamp=Date.now();try{localStorage.setItem('meadow-v1',JSON.stringify(s))}catch(e){storage=false}if(!storage)$('save').textContent='Saving unavailable'}
+let last=Date.now(),autoClock=0,resetOpen=false;
+render();save();if(s.pendingEvent)showEvent();else if(!s.hasSeenGuide)showGuide();
+setInterval(()=>{const now=Date.now(),dt=Math.max(0,(now-last)/1000);last=now;if(pauseState())return;
+const advanced=advanceSimulation(Math.min(dt,2));autoClock+=advanced;if(s.auto&&autoClock>=5&&!s.pendingEvent){autoClock=0;autopilotStep()}render()},250);
+setInterval(save,5000);window.addEventListener('pagehide',save);$('auto').onclick=()=>{s.auto=!s.auto;save();render()};$('boost').onclick=()=>upgrade();$('close').onclick=()=>$('welcome').hidden=true;
+function openReset(){if(guideOpen)closeGuide();if(reportOpen)closeReport();if(s.pendingEvent)$('eventDialog').hidden=true;if(pendingPurchase)closeDecision();resetOpen=true;document.querySelector('main').inert=true;$('resetAccept').checked=false;$('resetConfirm').disabled=true;$('resetDialog').hidden=false;$('resetCancel').focus()}
+function closeReset(){resetOpen=false;$('resetDialog').hidden=true;document.querySelector('main').inert=false;last=Date.now();if(s.pendingEvent)showEvent();else $('reset').focus()}
+function resetFarm(){
+if(!$('resetAccept').checked)return false;
+s=fresh();$('eventDialog').hidden=true;pendingPurchase=null;displayedStage=-1;autoClock=0;logs=[];clearTimeout(achievementTimer);$('toast').style.opacity='0';$('welcome').hidden=true;$('purchaseDecision').hidden=true;
+closeReset();log('A fresh start: grow your wheat to reach Smallholding.');render();save();showGuide();return true;
+}
+$('reset').onclick=openReset;$('resetCancel').onclick=closeReset;
+$('resetAccept').onchange=()=>{$('resetConfirm').disabled=!$('resetAccept').checked};
+$('resetConfirm').onclick=resetFarm;
+$('resetDialog').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();closeReset()}if(e.key==='Tab'){const first=$('resetAccept'),lastButton=$('resetConfirm').disabled?$('resetCancel'):$('resetConfirm');if(e.shiftKey&&document.activeElement===first){e.preventDefault();lastButton.focus()}else if(!e.shiftKey&&document.activeElement===lastButton){e.preventDefault();first.focus()}}});
+
+</script></html>
